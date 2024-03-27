@@ -5,15 +5,17 @@ Player player;
 Camera camera;
 
 ArrayList<Enemy> enemies = new ArrayList();
+ArrayList<Wall> walls = new ArrayList();
 
 void setup() {
   size(1280, 720);
   player = new Player(width/2, height/2);
   camera = new Camera(player);
   
+  translate(-camera.x, -camera.y);
   for(int i = 0; i < 10; i++) {
-    Enemy e = new Enemy(random(width), random(height));
-    enemies.add(e);
+    Wall w = new Wall(random(width), random(height));
+    walls.add(w);
   }
 }
 
@@ -33,9 +35,12 @@ void draw() {
   //UPDATE OBJECTS
   camera.update();
   
-  for(int i = 0; i < enemies.size(); i++) {
-    Enemy e = enemies.get(i);
-    e.update();
+  for(int i = 0; i < walls.size(); i++) {
+    Wall w = walls.get(i);
+    w.update();    
+    if(w.checkCollision(player)) {
+      player.applyFix(player.findOverlapFix(w));
+    }
   }
   
   player.update();
@@ -48,9 +53,9 @@ void draw() {
 
 
   //DRAW OBJECTS
-  for(int i = 0; i < enemies.size(); i++) {
-    Enemy e = enemies.get(i);
-    e.draw();
+  for(int i = 0; i < walls.size(); i++) {
+    Wall w = walls.get(i);
+    w.draw();
   }
   
   

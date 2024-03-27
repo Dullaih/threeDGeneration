@@ -10,6 +10,9 @@ class Player extends AABB {
   }
 
   void update() {
+    
+    calcAngleToMouse();
+    
     if (Keyboard.isDown(Keyboard.LEFT)) {
       velocity.x = -250;
     }
@@ -34,6 +37,31 @@ class Player extends AABB {
 
   void draw() {
     fill(#FF2483);
-    rect(x - halfW, y - halfH, w, h);
+    pushMatrix();
+    translate(x, y);
+    rotate(angle);
+    rect(-halfW, -halfH, w, h);
+    popMatrix();
+  }
+  
+  @Override void applyFix(PVector fix) {
+    x += fix.x;
+    y += fix.y;
+    if (fix.x != 0) {
+      // If we move the player left or right, the player must have hit a wall, so we set horizontal velocity to zero.
+      velocity.x = 0;
+    }
+    if (fix.y != 0) {
+      // If we move the player up or down, the player must have hit a floor or ceiling, so we set vertical velocity to zero.
+      velocity.y = 0;
+      if (fix.y < 0) {
+        // If we move the player up, we must have hit a floor.
+      }
+      if (fix.y > 0) {
+        // If we move the player down, we must have hit our head on a ceiling.
+      }
+    }
+    // recalculate AABB (since we moved the object AND we might have other collisions to fix yet this frame):
+    calcAABB();
   }
 }

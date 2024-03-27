@@ -36,12 +36,12 @@ class AABB {
     edgeT = y - halfH;
     edgeB = y + halfH;
   }
-  
-  /* void calcAngleToMouse() {
-    float dx = camera.x + mouseX/zoomAmount - x;
-    float dy = camera.y + mouseY/zoomAmount - y;
+
+  void calcAngleToMouse() {
+    float dx = camera.x + mouseX - x;
+    float dy = camera.y + mouseY - y;
     angle = atan2(dy, dx);
-  } */
+  }
 
   boolean checkCollision(AABB other) {
     if (edgeR < other.edgeL) return false;
@@ -50,24 +50,7 @@ class AABB {
     if (edgeT > other.edgeB) return false;
     return true;
   }
-
-  public void fixOverlap(AABB other) {
-    float pushUp = edgeB - other.edgeT;
-    float pushLeft = edgeR - other.edgeL;
-
-    if (pushUp <= pushLeft) setBottomEdge(other.edgeT);
-    else setRightEdge(other.edgeL);
-  }
-  public void setBottomEdge(float Y) {
-    y = Y - halfH;
-    velocity.y = 0;
-    calcAABB();
-  }
-  public void setRightEdge(float X) {
-    x = X - halfW;
-    velocity.x = 0;
-    calcAABB();
-  }
+  
   /**
    * This method finds the best solution for moving (this) AABB out from an (other)
    * AABB object. The method compares four possible solutions: moving (this) box
