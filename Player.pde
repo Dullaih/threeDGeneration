@@ -1,17 +1,14 @@
 class Player extends AABB {
-
-  int level = 1;
-
-  Player(float xPos, float yPos) {
+  
+  Player(float xPos, float yPos, float zPos) {
     x = xPos;
     y = yPos;
+    z = zPos;
 
-    setSize(75, 75);
+    setSize(75, 75, 75);
   }
 
   void update() {
-    
-    calcAngleToMouse();
     
     if (Keyboard.isDown(Keyboard.LEFT)) {
       velocity.x = -250;
@@ -40,13 +37,14 @@ class Player extends AABB {
     pushMatrix();
     translate(x, y);
     rotate(angle);
-    rect(-halfW, -halfH, w, h);
+    box(-halfW, -halfH, -halfD);
     popMatrix();
   }
   
   @Override void applyFix(PVector fix) {
     x += fix.x;
     y += fix.y;
+    z += fix.z;
     if (fix.x != 0) {
       // If we move the player left or right, the player must have hit a wall, so we set horizontal velocity to zero.
       velocity.x = 0;
@@ -58,6 +56,16 @@ class Player extends AABB {
         // If we move the player up, we must have hit a floor.
       }
       if (fix.y > 0) {
+        // If we move the player down, we must have hit our head on a ceiling.
+      }
+    }
+    if (fix.z != 0) {
+      // If we move the player up or down, the player must have hit a floor or ceiling, so we set vertical velocity to zero.
+      velocity.y = 0;
+      if (fix.z < 0) {
+        // If we move the player up, we must have hit a floor.
+      }
+      if (fix.z > 0) {
         // If we move the player down, we must have hit our head on a ceiling.
       }
     }

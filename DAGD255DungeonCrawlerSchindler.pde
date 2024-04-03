@@ -2,19 +2,17 @@ float dt = 0;
 float prevTime = 0;
 
 Player player;
-Camera camera;
-
+AABB aabb = new AABB();
 ArrayList<Enemy> enemies = new ArrayList();
 ArrayList<Wall> walls = new ArrayList();
 
 void setup() {
-  size(1280, 720);
-  player = new Player(width/2, height/2);
-  camera = new Camera(player);
+  size(1280, 720, P3D);
+  player = new Player(width/2, height/2, 50);
   
-  translate(-camera.x, -camera.y);
-  for(int i = 0; i < 10; i++) {
-    Wall w = new Wall(random(width), random(height));
+  camera(640, 360, 1020, 540, 360, 50, 0.0, 1.0, 0.0);
+  for(int i = 0; i < 1; i++) {
+    Wall w = new Wall(100, 100, 100);
     walls.add(w);
   }
 }
@@ -25,7 +23,6 @@ void draw() {
   background(128);
   
   pushMatrix();
-  translate(-camera.x, -camera.y);
 
 
   //SPAWN OBJECTS
@@ -33,7 +30,6 @@ void draw() {
 
 
   //UPDATE OBJECTS
-  camera.update();
   
   for(int i = 0; i < walls.size(); i++) {
     Wall w = walls.get(i);
@@ -44,6 +40,8 @@ void draw() {
   }
   
   player.update();
+  
+  if(aabb.checkCollision(player)) println("colliding");
 
 
   //LATE UPDATE OBJECTS

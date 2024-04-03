@@ -1,9 +1,10 @@
 class Wall extends AABB {
 
-  Wall(float x, float y) {
+  Wall(float x, float y, float z) {
     this.x = x;
     this.y = y;
-    setSize(random(50, 200), random(50, 200));
+    this.z = z;
+    setSize(100, 100, 100);
   }
 
   void update() {
@@ -13,6 +14,6 @@ class Wall extends AABB {
 
   void draw() {
     fill(0);
-    rect(x - halfW, y - halfH, w, h);
+    box(x - halfW, y - halfH, z - halfD);
   }
 }
