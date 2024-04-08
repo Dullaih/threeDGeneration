@@ -88,7 +88,7 @@ class AABB {
 
     result.x = (absMoveL < absMoveR) ? moveL : moveR; // store the smaller horizontal value.
     result.y = (absMoveU < absMoveD) ? moveU : moveD; // store the smaller vertical value.
-    result.z = (absMoveB < absMoveF) ? moveB : moveF;
+    result.z = (absMoveB < absMoveF) ? moveB : moveF; // store the smaller depth value
 
     if (abs(result.y) < abs(result.x) && abs(result.y) < abs(result.z)) {
       // If the vertical value is smaller, set horizontal to zero.
@@ -99,6 +99,8 @@ class AABB {
     } else {
       result.z = 0;
     }
+    
+    println(result);
 
     return result;
   }

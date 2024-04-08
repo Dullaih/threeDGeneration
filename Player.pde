@@ -35,9 +35,9 @@ class Player extends AABB {
   void draw() {
     fill(#FF2483);
     pushMatrix();
-    translate(x, y);
-    rotate(angle);
-    box(-halfW, -halfH, -halfD);
+    translate(x, y, z);
+    //rotate(angle);
+    box(h, w, d);
     popMatrix();
   }
   

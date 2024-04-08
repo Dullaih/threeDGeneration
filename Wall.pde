@@ -14,6 +14,10 @@ class Wall extends AABB {
 
   void draw() {
     fill(0);
-    box(x - halfW, y - halfH, z - halfD);
+    stroke(255);
+    pushMatrix();
+    translate(x, y, z);
+    box(h, w, d);
+    popMatrix();
   }
 }
