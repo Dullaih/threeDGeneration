@@ -84,7 +84,7 @@ class Player extends AABB {
   }
   
   void playerCamera() {
-    camera(x, y, z, 0, mouseY, -mouseX, 0.0, 1.0, 0.0);
-    angle = atan2(x+mouseX, y+mouseY);
+    camera(x, y, z, x-1000, map(mouseY, 0, height, -height*2, height*2), map(-mouseX, 0, -width, width*2, -width*2), 0.0, 1.0, 0.0);
+    //angle = atan2(x+mouseX, y+mouseY);
   }
 }

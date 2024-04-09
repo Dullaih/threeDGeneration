@@ -9,19 +9,18 @@ ArrayList<Wall> walls = new ArrayList();
 void setup() {
   size(1280, 720, P3D);
   player = new Player(width/2, height/2, 0);
-  
-  
-  for(int i = 0; i < 1; i++) {
-    Wall w = new Wall(540, 720, -400);
-    walls.add(w);
-  }
+
+  Wall w = new Wall(540, 720, -400);
+  walls.add(w);
+  Wall z = new Wall(-540, 720, -400);
+  walls.add(z);
 }
 
 void draw() {
   //BACKGROUND AND DT
   calcDeltaTime();
   background(128);
-  
+
   pushMatrix();
 
 
@@ -30,15 +29,15 @@ void draw() {
 
 
   //UPDATE OBJECTS
-  
-  for(int i = 0; i < walls.size(); i++) {
+
+  for (int i = 0; i < walls.size(); i++) {
     Wall w = walls.get(i);
-    w.update();    
-    if(w.checkCollision(player)) {
+    w.update();
+    if (w.checkCollision(player)) {
       player.applyFix(player.findOverlapFix(w));
     }
   }
-  
+
   player.update();
 
   //LATE UPDATE OBJECTS
@@ -48,17 +47,17 @@ void draw() {
 
 
   //DRAW OBJECTS
-  for(int i = 0; i < walls.size(); i++) {
+  for (int i = 0; i < walls.size(); i++) {
     Wall w = walls.get(i);
     w.draw();
   }
-  
-  
-  
+
+
+
   player.draw();
-  
+
   //println(keyCode);
-  
+
   popMatrix();
   //DRAW HUD
 }
