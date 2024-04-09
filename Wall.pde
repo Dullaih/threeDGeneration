@@ -4,7 +4,7 @@ class Wall extends AABB {
     this.x = x;
     this.y = y;
     this.z = z;
-    setSize(100, 100, 100);
+    setSize(1000, 10, 1000);
   }
 
   void update() {
@@ -17,7 +17,7 @@ class Wall extends AABB {
     stroke(255);
     pushMatrix();
     translate(x, y, z);
-    box(h, w, d);
+    box(w, h, d);
     popMatrix();
   }
 }

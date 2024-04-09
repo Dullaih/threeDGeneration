@@ -5,13 +5,14 @@ Player player;
 ArrayList<Enemy> enemies = new ArrayList();
 ArrayList<Wall> walls = new ArrayList();
 
+
 void setup() {
   size(1280, 720, P3D);
   player = new Player(width/2, height/2, 0);
   
-  camera(640, 360, 1020, 540, 360, 50, 0.0, 1.0, 0.0);
+  
   for(int i = 0; i < 1; i++) {
-    Wall w = new Wall(0, 0, 0);
+    Wall w = new Wall(540, 720, -400);
     walls.add(w);
   }
 }

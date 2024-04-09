@@ -17,16 +17,16 @@ class Player extends AABB {
       velocity.x = 250;
     }
     if (Keyboard.isDown(Keyboard.UP)) {
-      velocity.y = -250;
+      velocity.z = -250;
     }
     if (Keyboard.isDown(Keyboard.DOWN)) {
-      velocity.y = 250;
+      velocity.z = 250;
     }
     if(Keyboard.isDown(Keyboard.SPACE)) {
-      velocity.z = 100;
+      velocity.y = 100;
     }
     if(Keyboard.isDown(Keyboard.SHIFT)) {
-      velocity.z = -100;
+      velocity.y = -100;
     }
     
     x += velocity.x * dt;
@@ -37,15 +37,17 @@ class Player extends AABB {
     velocity.y *= 0.95;
     velocity.z *= 0.95;
     
+    playerCamera();
+    
     super.update();
   }
 
   void draw() {
-    fill(#FF2483);
+    noFill();
     pushMatrix();
     translate(x, y, z);
     //rotate(angle);
-    box(h, w, d);
+    box(w, h, d);
     popMatrix();
   }
   
@@ -79,5 +81,10 @@ class Player extends AABB {
     }
     // recalculate AABB (since we moved the object AND we might have other collisions to fix yet this frame):
     calcAABB();
+  }
+  
+  void playerCamera() {
+    camera(x, y, z, 0, mouseY, -mouseX, 0.0, 1.0, 0.0);
+    angle = atan2(x+mouseX, y+mouseY);
   }
 }
