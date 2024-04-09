@@ -92,12 +92,12 @@ class AABB {
 
     if (abs(result.y) < abs(result.x) && abs(result.y) < abs(result.z)) {
       // If the vertical value is smaller, set horizontal to zero.
-      result.x = 0;
+      result.x = result.z = 0;
     } else if (abs(result.x) < abs(result.y) && abs(result.x) < abs(result.z)) {
       // If the horizontal value is smaller, set vertical to zero.
-      result.y = 0;
+      result.y = result.z = 0;
     } else {
-      result.z = 0;
+      result.x = result.y = 0;
     }
     
     println(result);
