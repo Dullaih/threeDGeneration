@@ -22,12 +22,20 @@ class Player extends AABB {
     if (Keyboard.isDown(Keyboard.DOWN)) {
       velocity.y = 250;
     }
+    if(Keyboard.isDown(Keyboard.SPACE)) {
+      velocity.z = 100;
+    }
+    if(Keyboard.isDown(Keyboard.SHIFT)) {
+      velocity.z = -100;
+    }
     
     x += velocity.x * dt;
     y += velocity.y * dt;
+    z += velocity.z * dt;
     
     velocity.x *= 0.95;
     velocity.y *= 0.95;
+    velocity.z *= 0.95;
     
     super.update();
   }

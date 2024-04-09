@@ -56,6 +56,8 @@ void draw() {
   
   player.draw();
   
+  //println(keyCode);
+  
   popMatrix();
   //DRAW HUD
 }
