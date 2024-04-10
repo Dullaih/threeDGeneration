@@ -1,6 +1,6 @@
 class Player extends AABB {
   
-  float rotationAngle, elevationAngle, direction;
+  float rotationAngle, elevationAngle, speedX, speedZ;
 
   Player(float xPos, float yPos, float zPos) {
     x = xPos;
@@ -14,16 +14,28 @@ class Player extends AABB {
     playerCamera();
 
     if (Keyboard.isDown(Keyboard.LEFT)) {
-      velocity.x = -250;
+      velocity.x = sin(rotationAngle);
+      velocity.z = cos(rotationAngle);
+      speedX = 250;
+      speedZ = -250;
     }
     if (Keyboard.isDown(Keyboard.RIGHT)) {
-      velocity.x = 250;
+      velocity.x = sin(rotationAngle);
+      velocity.z = cos(rotationAngle);
+      speedX = -250;
+      speedZ = 250;
     }
     if (Keyboard.isDown(Keyboard.UP)) {
-      velocity.z = -250;
+      velocity.x = cos(rotationAngle);
+      velocity.z = sin(rotationAngle);
+      speedX = 250;
+      speedZ = 250;
     }
     if (Keyboard.isDown(Keyboard.DOWN)) {
-      velocity.z = 250;
+      velocity.x = cos(rotationAngle);
+      velocity.z = sin(rotationAngle);
+      speedX = -250;
+      speedZ = -250;
     }
     if (Keyboard.isDown(Keyboard.SPACE)) {
       velocity.y = 100;
@@ -32,9 +44,9 @@ class Player extends AABB {
       velocity.y = -100;
     }
 
-    x += velocity.x * dt;
+    x += velocity.x * speedX * dt;
     y += velocity.y * dt;
-    z += velocity.z * dt;
+    z += velocity.z * speedZ * dt;
 
     velocity.x *= 0.95;
     velocity.y *= 0.95;
@@ -48,7 +60,7 @@ class Player extends AABB {
     pushMatrix();
     translate(x, y, z);
     //rotate(angle);
-    box(w, h, d);
+    //box(w, h, d);
     popMatrix();
   }
 
@@ -87,13 +99,13 @@ class Player extends AABB {
   void playerCamera() {
     rotationAngle = map(mouseX, 0, width, 0, TWO_PI);
     elevationAngle = map(mouseY, 0, height, 0, PI);
-    
+    float rotationMultiplier = 1000;
 
-    float centerX = cos(rotationAngle) * sin(elevationAngle);
-    float centerY = -cos(elevationAngle);
-    float centerZ = sin(rotationAngle) * sin(elevationAngle);
-    camera(x, y, z, centerX*1000, centerY*1000, centerZ*1000, 0.0, 1.0, 0.0);
+    float centerX = cos(rotationAngle) * sin(elevationAngle) * rotationMultiplier;
+    float centerY = -cos(elevationAngle) * rotationMultiplier;
+    float centerZ = sin(rotationAngle) * sin(elevationAngle) * rotationMultiplier;
+    camera(x, y, z, centerX + x, centerY + y, centerZ + z, 0.0, 1.0, 0.0);
 
-    println(cos(rotationAngle/2) + " | " + centerX + " | " + centerY + " | " + centerZ);
+    println(sin(rotationAngle) + " | " + cos(rotationAngle) + " | " + centerY + " | " + centerZ);
   }
 }
