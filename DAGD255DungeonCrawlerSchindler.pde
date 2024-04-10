@@ -8,6 +8,7 @@ ArrayList<Wall> walls = new ArrayList();
 
 void setup() {
   size(1280, 720, P3D);
+  //fullScreen(P3D);
   player = new Player(width/2, height/2, 0);
 
   Wall w = new Wall(540, 720, -400);

@@ -100,7 +100,7 @@ class AABB {
       result.x = result.y = 0;
     }
     
-    println(result);
+    //println(result);
 
     return result;
   }

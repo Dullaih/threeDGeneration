@@ -1,5 +1,7 @@
 class Player extends AABB {
   
+  float rotationAngle, elevationAngle, direction;
+
   Player(float xPos, float yPos, float zPos) {
     x = xPos;
     y = yPos;
@@ -9,7 +11,8 @@ class Player extends AABB {
   }
 
   void update() {
-    
+    playerCamera();
+
     if (Keyboard.isDown(Keyboard.LEFT)) {
       velocity.x = -250;
     }
@@ -22,23 +25,21 @@ class Player extends AABB {
     if (Keyboard.isDown(Keyboard.DOWN)) {
       velocity.z = 250;
     }
-    if(Keyboard.isDown(Keyboard.SPACE)) {
+    if (Keyboard.isDown(Keyboard.SPACE)) {
       velocity.y = 100;
     }
-    if(Keyboard.isDown(Keyboard.SHIFT)) {
+    if (Keyboard.isDown(Keyboard.SHIFT)) {
       velocity.y = -100;
     }
-    
+
     x += velocity.x * dt;
     y += velocity.y * dt;
     z += velocity.z * dt;
-    
+
     velocity.x *= 0.95;
     velocity.y *= 0.95;
     velocity.z *= 0.95;
-    
-    playerCamera();
-    
+
     super.update();
   }
 
@@ -50,7 +51,7 @@ class Player extends AABB {
     box(w, h, d);
     popMatrix();
   }
-  
+
   @Override void applyFix(PVector fix) {
     x += fix.x;
     y += fix.y;
@@ -82,9 +83,17 @@ class Player extends AABB {
     // recalculate AABB (since we moved the object AND we might have other collisions to fix yet this frame):
     calcAABB();
   }
-  
+
   void playerCamera() {
-    camera(x, y, z, x-1000, map(mouseY, 0, height, -height*2, height*2), map(-mouseX, 0, -width, width*2, -width*2), 0.0, 1.0, 0.0);
-    //angle = atan2(x+mouseX, y+mouseY);
+    rotationAngle = map(mouseX, 0, width, 0, TWO_PI);
+    elevationAngle = map(mouseY, 0, height, 0, PI);
+    
+
+    float centerX = cos(rotationAngle) * sin(elevationAngle);
+    float centerY = -cos(elevationAngle);
+    float centerZ = sin(rotationAngle) * sin(elevationAngle);
+    camera(x, y, z, centerX*1000, centerY*1000, centerZ*1000, 0.0, 1.0, 0.0);
+
+    println(cos(rotationAngle/2) + " | " + centerX + " | " + centerY + " | " + centerZ);
   }
 }
