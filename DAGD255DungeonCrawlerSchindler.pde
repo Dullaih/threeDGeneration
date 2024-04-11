@@ -10,8 +10,8 @@ ArrayList<Wall> walls = new ArrayList();
 
 
 void setup() {
-  //size(1280, 720, P3D);
-  fullScreen(P3D);
+  size(1280, 720, P3D);
+  //fullScreen(P3D);
   //noCursor();
   player = new Player(width/2, height/2, 0);
   try { robot = new Robot(); }
@@ -36,6 +36,9 @@ void draw() {
 
 
   //UPDATE OBJECTS
+  
+  //robot.mouseMove(width/2,height/2);
+  
 
   for (int i = 0; i < walls.size(); i++) {
     Wall w = walls.get(i);
@@ -44,8 +47,6 @@ void draw() {
       player.applyFix(player.findOverlapFix(w));
     }
   }
-  
-  robot.mouseMove(width/2,height/2);
 
   player.update();
 

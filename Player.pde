@@ -105,12 +105,14 @@ class Player extends AABB {
     if(dy < 10) dy = 10;
     
 
-    rotationAngle = map(-dx, 0, width, 0, TWO_PI);
-    elevationAngle = map(dy, 0, height, 0, PI);
+    //rotationAngle = map(-dx, 0, width, 0, TWO_PI);
+    //elevationAngle = map(dy, 0, height, 0, PI);
+    rotationAngle = map(mouseX, 0, width, 0, TWO_PI);
+    elevationAngle = map(mouseY, 0, height, 0, PI);
     float rotationMultiplier = 1000;
 
     float centerX = cos(rotationAngle) * sin(elevationAngle) * rotationMultiplier;
-    float centerY = cos(elevationAngle) * rotationMultiplier;
+    float centerY = -cos(elevationAngle) * rotationMultiplier;
     float centerZ = sin(rotationAngle) * sin(elevationAngle) * rotationMultiplier;
     camera(x, y-75, z, centerX + x, centerY + y, centerZ + z, 0.0, 1.0, 0.0);
 
