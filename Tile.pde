@@ -1,10 +1,10 @@
-class Wall extends AABB {
+class Tile extends AABB {
 
-  Wall(float x, float y, float z) {
+  Tile(float x, float y, float z) {
     this.x = x;
     this.y = y;
     this.z = z;
-    setSize(2000, 10, 2000);
+    setSize(100, 100, 100);
   }
 
   void update() {
@@ -20,4 +20,4 @@ class Wall extends AABB {
     box(w, h, d);
     popMatrix();
   }
-}
+}'

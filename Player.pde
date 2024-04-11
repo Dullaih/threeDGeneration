@@ -18,6 +18,9 @@ class Player extends AABB {
     
     playerCamera();
 
+    if(Keyboard.isDown(Keyboard.SHIFT) && isGrounded) {
+      sprintModifier = 1.5;
+    }
     if (Keyboard.isDown(Keyboard.LEFT)) {
       velocity.x += sin(rotationAngle)*20*sprintModifier;
       velocity.z += cos(rotationAngle)*-20*sprintModifier;
@@ -37,24 +40,22 @@ class Player extends AABB {
     if (Keyboard.isDown(Keyboard.SPACE) && isGrounded) {
       velocity.y = -500;
     }
-    if(Keyboard.isDown(Keyboard.SHIFT) && isGrounded) {
-      sprintModifier = 3;
-    }
     
-    if(velocity.x > 300*sprintModifier) velocity.x = 300*sprintModifier;
-    if(velocity.x < -300*sprintModifier) velocity.x = -300*sprintModifier;
-    if(velocity.z > 300*sprintModifier) velocity.z = 300*sprintModifier;
-    if(velocity.z < -300*sprintModifier) velocity.z = -300*sprintModifier;
+    if(velocity.x > 400*sprintModifier) velocity.x = 400*sprintModifier;
+    if(velocity.x < -400*sprintModifier) velocity.x = -400*sprintModifier;
+    if(velocity.z > 400*sprintModifier) velocity.z = 400*sprintModifier;
+    if(velocity.z < -400*sprintModifier) velocity.z = -400*sprintModifier;
 
     x += velocity.x * dt;
     y += velocity.y * dt;
     z += velocity.z * dt;
 
-    velocity.x *= 0.95;
+    velocity.x *= 0.92;
     //velocity.y *= 0.95;
-    velocity.z *= 0.95;
+    velocity.z *= 0.92;
 
     isGrounded = false;
+    sprintModifier = 1;
     super.update();
   }
 

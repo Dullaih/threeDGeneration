@@ -6,7 +6,7 @@ Robot robot;
 
 Player player;
 ArrayList<Enemy> enemies = new ArrayList();
-ArrayList<Wall> walls = new ArrayList();
+ArrayList<Tile> tiles = new ArrayList();
 
 final float GRAVITY = 981;
 
@@ -18,9 +18,16 @@ void setup() {
   player = new Player(0,-1000,0);
   try { robot = new Robot(); }
   catch (Exception e) {}
-
-  Wall w = new Wall(800, 720, -400);
-  walls.add(w);
+  
+  int offsetX = 100; int offsetZ = 100;
+  for(int i = 0; i < 20; i++) {
+    Tile t = new Tile(offsetX*i, 0, 0);
+    tiles.add(t);
+    for(int j = 0; j < 20; j++) {
+      Tile z = new Tile(offsetX*i, 0, offsetZ*j);
+      tiles.add(z);
+    }
+  }
   //Wall z = new Wall(-840, 720, -800);
   //walls.add(z);
 }
@@ -42,11 +49,11 @@ void draw() {
   robot.mouseMove(width/2,height/2);
   
 
-  for (int i = 0; i < walls.size(); i++) {
-    Wall w = walls.get(i);
-    w.update();
-    if (w.checkCollision(player)) {
-      player.applyFix(player.findOverlapFix(w));
+  for (int i = 0; i < tiles.size(); i++) {
+    Tile t = tiles.get(i);
+    t.update();
+    if (t.checkCollision(player)) {
+      player.applyFix(player.findOverlapFix(t));
     }
   }
 
@@ -59,9 +66,9 @@ void draw() {
 
 
   //DRAW OBJECTS
-  for (int i = 0; i < walls.size(); i++) {
-    Wall w = walls.get(i);
-    w.draw();
+  for (int i = 0; i < tiles.size(); i++) {
+    Tile t = tiles.get(i);
+    t.draw();
   }
 
   player.draw();
