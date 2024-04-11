@@ -1,6 +1,7 @@
 class Player extends AABB {
-  
+
   float rotationAngle, elevationAngle, speedX, speedZ;
+  float dx = 0, dy = 0;
 
   Player(float xPos, float yPos, float zPos) {
     x = xPos;
@@ -97,15 +98,22 @@ class Player extends AABB {
   }
 
   void playerCamera() {
-    rotationAngle = map(mouseX, 0, width, 0, TWO_PI);
-    elevationAngle = map(mouseY, 0, height, 0, PI);
+
+    dx += width/2-mouseX;
+    dy += height/2-mouseY;
+    if(dy > height) dy = height;
+    if(dy < 10) dy = 10;
+    
+
+    rotationAngle = map(-dx, 0, width, 0, TWO_PI);
+    elevationAngle = map(dy, 0, height, 0, PI);
     float rotationMultiplier = 1000;
 
     float centerX = cos(rotationAngle) * sin(elevationAngle) * rotationMultiplier;
-    float centerY = -cos(elevationAngle) * rotationMultiplier;
+    float centerY = cos(elevationAngle) * rotationMultiplier;
     float centerZ = sin(rotationAngle) * sin(elevationAngle) * rotationMultiplier;
     camera(x, y-75, z, centerX + x, centerY + y, centerZ + z, 0.0, 1.0, 0.0);
 
-    println(sin(rotationAngle) + " | " + cos(rotationAngle) + " | " + centerY + " | " + centerZ);
+    println(mouseX + " | " + mouseY + " | " + dx + " | " + dy);
   }
 }

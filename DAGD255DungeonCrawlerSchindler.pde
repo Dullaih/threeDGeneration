@@ -10,8 +10,8 @@ ArrayList<Wall> walls = new ArrayList();
 
 
 void setup() {
-  size(1280, 720, P3D);
-  //fullScreen(P3D);
+  //size(1280, 720, P3D);
+  fullScreen(P3D);
   //noCursor();
   player = new Player(width/2, height/2, 0);
   try { robot = new Robot(); }
@@ -45,7 +45,7 @@ void draw() {
     }
   }
   
-  //robot.mouseMove(width/2,height/2);
+  robot.mouseMove(width/2,height/2);
 
   player.update();
 
