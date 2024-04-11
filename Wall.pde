@@ -4,7 +4,7 @@ class Wall extends AABB {
     this.x = x;
     this.y = y;
     this.z = z;
-    setSize(1000, 10, 1000);
+    setSize(2000, 10, 2000);
   }
 
   void update() {

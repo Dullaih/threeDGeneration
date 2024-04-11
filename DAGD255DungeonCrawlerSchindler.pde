@@ -8,19 +8,21 @@ Player player;
 ArrayList<Enemy> enemies = new ArrayList();
 ArrayList<Wall> walls = new ArrayList();
 
+final float GRAVITY = 981;
+
 
 void setup() {
-  size(1280, 720, P3D);
-  //fullScreen(P3D);
-  //noCursor();
-  player = new Player(width/2, height/2, 0);
+  //size(1280, 720, P3D);
+  fullScreen(P3D);
+  noCursor();
+  player = new Player(0,-1000,0);
   try { robot = new Robot(); }
   catch (Exception e) {}
 
-  Wall w = new Wall(540, 720, -400);
+  Wall w = new Wall(800, 720, -400);
   walls.add(w);
-  Wall z = new Wall(-540, 720, -400);
-  walls.add(z);
+  //Wall z = new Wall(-840, 720, -800);
+  //walls.add(z);
 }
 
 void draw() {
@@ -37,7 +39,7 @@ void draw() {
 
   //UPDATE OBJECTS
   
-  //robot.mouseMove(width/2,height/2);
+  robot.mouseMove(width/2,height/2);
   
 
   for (int i = 0; i < walls.size(); i++) {
@@ -61,8 +63,6 @@ void draw() {
     Wall w = walls.get(i);
     w.draw();
   }
-
-
 
   player.draw();
 
