@@ -1,5 +1,8 @@
+import java.awt.Robot;
+
 float dt = 0;
 float prevTime = 0;
+Robot robot;
 
 Player player;
 ArrayList<Enemy> enemies = new ArrayList();
@@ -9,7 +12,10 @@ ArrayList<Wall> walls = new ArrayList();
 void setup() {
   size(1280, 720, P3D);
   //fullScreen(P3D);
+  //noCursor();
   player = new Player(width/2, height/2, 0);
+  try { robot = new Robot(); }
+  catch (Exception e) {}
 
   Wall w = new Wall(540, 720, -400);
   walls.add(w);
@@ -38,6 +44,8 @@ void draw() {
       player.applyFix(player.findOverlapFix(w));
     }
   }
+  
+  //robot.mouseMove(width/2,height/2);
 
   player.update();
 

@@ -104,7 +104,7 @@ class Player extends AABB {
     float centerX = cos(rotationAngle) * sin(elevationAngle) * rotationMultiplier;
     float centerY = -cos(elevationAngle) * rotationMultiplier;
     float centerZ = sin(rotationAngle) * sin(elevationAngle) * rotationMultiplier;
-    camera(x, y, z, centerX + x, centerY + y, centerZ + z, 0.0, 1.0, 0.0);
+    camera(x, y-75, z, centerX + x, centerY + y, centerZ + z, 0.0, 1.0, 0.0);
 
     println(sin(rotationAngle) + " | " + cos(rotationAngle) + " | " + centerY + " | " + centerZ);
   }
