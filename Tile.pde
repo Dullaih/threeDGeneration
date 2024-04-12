@@ -4,7 +4,7 @@ class Tile extends AABB {
     this.x = x;
     this.y = y;
     this.z = z;
-    setSize(100, 100, 100);
+    setSize(150, 150, 150);
   }
 
   void update() {
@@ -20,4 +20,4 @@ class Tile extends AABB {
     box(w, h, d);
     popMatrix();
   }
-}'
+}

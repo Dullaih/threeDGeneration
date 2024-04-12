@@ -3,6 +3,7 @@ import java.awt.Robot;
 float dt = 0;
 float prevTime = 0;
 Robot robot;
+float floorWidth = 15, floorLength = 15, wallHeight = 3;
 
 Player player;
 ArrayList<Enemy> enemies = new ArrayList();
@@ -12,25 +13,39 @@ final float GRAVITY = 981;
 
 
 void setup() {
-  //size(1280, 720, P3D);
-  fullScreen(P3D);
-  noCursor();
-  player = new Player(0,-1000,0);
-  try { robot = new Robot(); }
-  catch (Exception e) {}
-  
-  int offsetX = 100; int offsetZ = 100;
-  for(int i = 0; i < 20; i++) {
-    Tile t = new Tile(offsetX*i, 0, 0);
-    tiles.add(t);
-    for(int j = 0; j < 20; j++) {
-      Tile z = new Tile(offsetX*i, 0, offsetZ*j);
-      tiles.add(z);
+  size(1280, 720, P3D);
+  //fullScreen(P3D);
+  //noCursor();
+  player = new Player(500, -1000, 500);
+  try {
+    robot = new Robot();
+  }
+  catch (Exception e) {
+  }
+
+  int offsetX = 150, offsetY = -150, offsetZ = 150;
+
+  for (int h = 0; h < wallHeight; h++) {
+
+    for (int i = 0; i < floorWidth; i++) {
+      Tile t = new Tile(offsetX*i, offsetY*h, 0);
+      tiles.add(t);
+
+      for (int j = 0; j < floorLength; j++) {
+        if (h > 0) {
+          if (j == 0 || j == floorLength-1 || i == 0 || i == floorWidth-1) {
+            Tile z = new Tile(offsetX*i, offsetY*h, offsetZ*j);
+            tiles.add(z);
+          }
+        } else {
+          Tile z = new Tile(offsetX*i, offsetY*h, offsetZ*j);
+          tiles.add(z);
+        }
+      }
     }
   }
-  //Wall z = new Wall(-840, 720, -800);
-  //walls.add(z);
 }
+
 
 void draw() {
   //BACKGROUND AND DT
@@ -45,9 +60,9 @@ void draw() {
 
 
   //UPDATE OBJECTS
-  
-  robot.mouseMove(width/2,height/2);
-  
+
+  //robot.mouseMove(width/2, height/2);
+
 
   for (int i = 0; i < tiles.size(); i++) {
     Tile t = tiles.get(i);
