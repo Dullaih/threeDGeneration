@@ -90,7 +90,7 @@ class Player extends AABB {
     }
     if (fix.z != 0) {
       // If we move the player up or down, the player must have hit a floor or ceiling, so we set vertical velocity to zero.
-      velocity.y = 0;
+      velocity.z = 0;
       if (fix.z < 0) {
         
       }

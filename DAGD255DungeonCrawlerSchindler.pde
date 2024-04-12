@@ -23,25 +23,28 @@ void setup() {
   catch (Exception e) {
   }
 
-  int offsetX = 150, offsetY = -150, offsetZ = 150;
+  int offsetX = 150, offsetZ = 150;
 
-  for (int h = 0; h < wallHeight; h++) {
+  for (int i = 0; i < floorWidth; i++) {
+    Tile t = new Tile(offsetX*i, 0, 0);
+    tiles.add(t);
 
-    for (int i = 0; i < floorWidth; i++) {
-      Tile t = new Tile(offsetX*i, offsetY*h, 0);
+    for (int j = 0; j < floorLength; j++) {
+      Tile z = new Tile(offsetX*i, 0, offsetZ*j);
+      tiles.add(z);
+    }
+  }
+
+  for (int i = 0; i < 4; i++) {
+    if(i < 2) {
+      Tile t = new Tile(offsetX*7, -150, offsetZ*(floorWidth-1)*i);
+      t.setSize(offsetX*(floorLength-2), 500, 150);
       tiles.add(t);
-
-      for (int j = 0; j < floorLength; j++) {
-        if (h > 0) {
-          if (j == 0 || j == floorLength-1 || i == 0 || i == floorWidth-1) {
-            Tile z = new Tile(offsetX*i, offsetY*h, offsetZ*j);
-            tiles.add(z);
-          }
-        } else {
-          Tile z = new Tile(offsetX*i, offsetY*h, offsetZ*j);
-          tiles.add(z);
-        }
-      }
+    }
+    else {
+      Tile t = new Tile(offsetX*(floorLength-1)*(i-2), -150, offsetZ*7);
+      t.setSize(150, 500, offsetZ*(floorWidth-2));
+      tiles.add(t);
     }
   }
 }
