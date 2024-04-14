@@ -62,7 +62,7 @@ class Player extends AABB {
   }
 
   void draw() {
-    noFill();
+    //noFill();
     pushMatrix();
     translate(x, y, z);
     //rotate(angle);
@@ -110,17 +110,18 @@ class Player extends AABB {
     if(dy < 10) dy = 10;
     
 
-    //rotationAngle = map(-dx, 0, width, 0, TWO_PI);
-    //elevationAngle = map(dy, 0, height, 0, PI);
-    rotationAngle = map(mouseX, 0, width, 0, TWO_PI);
-    elevationAngle = map(mouseY, 0, height, 0, PI);
+    rotationAngle = map(-dx, 0, width, 0, TWO_PI);
+    elevationAngle = map(dy, 0, height, 0, PI);
+    //rotationAngle = map(mouseX, 0, width, 0, TWO_PI);
+    //elevationAngle = map(mouseY, 0, height, 0, PI);
     float rotationMultiplier = 1000;
+    float cameraOffset = 50;
 
-    float centerX = cos(rotationAngle) * sin(elevationAngle) * rotationMultiplier;
-    float centerY = -cos(elevationAngle) * rotationMultiplier;
-    float centerZ = sin(rotationAngle) * sin(elevationAngle) * rotationMultiplier;
-    camera(x, y-75, z, centerX + x, centerY + y, centerZ + z, 0.0, 1.0, 0.0);
+    float centerX = cos(rotationAngle) * sin(elevationAngle);
+    float centerY = cos(elevationAngle);
+    float centerZ = sin(rotationAngle) * sin(elevationAngle);
+    camera(x-(centerX*cameraOffset), y-75, z-(centerZ*cameraOffset), centerX*rotationMultiplier + x, centerY*rotationMultiplier + y, centerZ*rotationMultiplier + z, 0.0, 1.0, 0.0);
 
-    //println(mouseX + " | " + mouseY + " | " + dx + " | " + dy);
+    println(centerX + " | " + centerY + " | " + centerZ + " | " + x + " | " + y + " | " + z);
   }
 }
