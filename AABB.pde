@@ -44,14 +44,19 @@ class AABB {
   }
 
   boolean checkCollision(AABB other) {
-    if (sideR < other.sideL) return false;
-    if (sideL > other.sideR) return false;
-    if (sideB < other.sideT) return false;
-    if (sideT > other.sideB) return false;
-    if (sideD < other.sideF) return false;
-    if (sideF > other.sideD) return false;
+    if (sideR <= other.sideL) return false;
+    if (sideL >= other.sideR) return false;
+    if (sideB <= other.sideT) return false;
+    if (sideT >= other.sideB) return false;
+    if (sideD <= other.sideF) return false;
+    if (sideF >= other.sideD) return false;
     return true;
   }
+  
+  //boolean checkPointCollision (PVector point) {
+  //  if (point.x <= sideL && point.x >= sideR && point.y <= sideT && point.y >= sideB && point.z <= sideD && point.z >= sideF) return true;
+  //  return false;
+  //}
   
   /**
    * This method finds the best solution for moving (this) AABB out from an (other)

@@ -1,20 +1,23 @@
 import java.awt.Robot;
 
+Robot robot;
+
 float dt = 0;
 float prevTime = 0;
-Robot robot;
 float floorWidth = 15, floorLength = 15, wallHeight = 3;
 
 Player player;
 ArrayList<Enemy> enemies = new ArrayList();
 ArrayList<Tile> tiles = new ArrayList();
+ArrayList<Tile> spawnTiles = new ArrayList();
+ArrayList<Bullet> bullets = new ArrayList();
 
 final float GRAVITY = 981;
 
 
 void setup() {
-  //size(1280, 720, P3D);
-  fullScreen(P3D);
+  size(1280, 720, P3D);
+  //fullScreen(P3D);
   //noCursor();
   player = new Player(500, -1200, 500);
   try {
@@ -23,25 +26,33 @@ void setup() {
   catch (Exception e) {
   }
 
-  int offsetX = 150, offsetZ = 150;
+  int offsetX = 150, offsetY = -150, offsetZ = 150;
 
   for (int i = 0; i < floorWidth; i++) {
     Tile t = new Tile(offsetX*i, 0, 0);
     tiles.add(t);
-
     for (int j = 0; j < floorLength; j++) {
       Tile z = new Tile(offsetX*i, 0, offsetZ*j);
       tiles.add(z);
     }
   }
+  for (int h = 0; h < 1; h++) {
+    for (int i = 0; i < floorWidth-2; i++) {
+      Tile t = new Tile(offsetX*i+offsetX, offsetY*h+offsetY, offsetZ);
+      spawnTiles.add(t);
+      for (int j = 0; j < floorLength-2; j++) {
+        Tile z = new Tile(offsetX*i+offsetX, offsetY*h+offsetY, offsetZ*j+offsetZ);
+        spawnTiles.add(z);
+      }
+    }
+  }
 
   for (int i = 0; i < 4; i++) {
-    if(i < 2) {
+    if (i < 2) {
       Tile t = new Tile(offsetX*7, -150, offsetZ*(floorWidth-1)*i);
       t.setSize(offsetX*(floorLength-2), 500, 150);
       tiles.add(t);
-    }
-    else {
+    } else {
       Tile t = new Tile(offsetX*(floorLength-1)*(i-2), -150, offsetZ*7);
       t.setSize(150, 500, offsetZ*(floorWidth-2));
       tiles.add(t);
@@ -64,7 +75,7 @@ void draw() {
 
   //UPDATE OBJECTS
 
-  robot.mouseMove(width/2, height/2);
+  //robot.mouseMove(width/2, height/2);
 
 
   for (int i = 0; i < tiles.size(); i++) {
@@ -88,6 +99,11 @@ void draw() {
     Tile t = tiles.get(i);
     t.draw();
   }
+
+  //for (int i = 0; i < spawnTiles.size(); i++) {
+  //  Tile t = spawnTiles.get(i);
+  //  t.draw();
+  //}
 
   player.draw();
 

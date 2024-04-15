@@ -1,11 +1,12 @@
 class Player extends AABB {
 
   float rotationAngle, elevationAngle;
+  float centerX, centerY, centerZ;
   float dx = 0, dy = 0;
   boolean isGrounded;
-  float sprintModifier = 1;
+  float modifier = 1;
   float acceleration = 20;
-  float speed = 500;
+  float speed = 600;
 
   Player(float xPos, float yPos, float zPos) {
     x = xPos;
@@ -21,32 +22,32 @@ class Player extends AABB {
     playerCamera();
 
     if(Keyboard.isDown(Keyboard.SHIFT) && isGrounded) {
-      sprintModifier = 1.5;
+      modifier = 1.5;
     }
     if (Keyboard.isDown(Keyboard.LEFT)) {
-      velocity.x += sin(rotationAngle)*acceleration*sprintModifier;
-      velocity.z += cos(rotationAngle)*-acceleration*sprintModifier;
+      velocity.x += sin(rotationAngle)*acceleration*modifier;
+      velocity.z += cos(rotationAngle)*-acceleration*modifier;
     }
     if (Keyboard.isDown(Keyboard.RIGHT)) {
-      velocity.x += sin(rotationAngle)*-acceleration*sprintModifier;
-      velocity.z += cos(rotationAngle)*acceleration*sprintModifier;
+      velocity.x += sin(rotationAngle)*-acceleration*modifier;
+      velocity.z += cos(rotationAngle)*acceleration*modifier;
     }
     if (Keyboard.isDown(Keyboard.UP)) {
-      velocity.x += cos(rotationAngle)*acceleration*sprintModifier;
-      velocity.z += sin(rotationAngle)*acceleration*sprintModifier;
+      velocity.x += cos(rotationAngle)*acceleration*modifier;
+      velocity.z += sin(rotationAngle)*acceleration*modifier;
     }
     if (Keyboard.isDown(Keyboard.DOWN)) {
-      velocity.x += cos(rotationAngle)*-acceleration*sprintModifier;
-      velocity.z += sin(rotationAngle)*-acceleration*sprintModifier;
+      velocity.x += cos(rotationAngle)*-acceleration*modifier;
+      velocity.z += sin(rotationAngle)*-acceleration*modifier;
     }
     if (Keyboard.isDown(Keyboard.SPACE) && isGrounded) {
       velocity.y = -speed;
     }
     
-    if(velocity.x > speed*sprintModifier) velocity.x = speed*sprintModifier;
-    if(velocity.x < -speed*sprintModifier) velocity.x = -speed*sprintModifier;
-    if(velocity.z > speed*sprintModifier) velocity.z = speed*sprintModifier;
-    if(velocity.z < -speed*sprintModifier) velocity.z = -speed*sprintModifier;
+    if(velocity.x > speed*modifier) velocity.x = speed*modifier;
+    if(velocity.x < -speed*modifier) velocity.x = -speed*modifier;
+    if(velocity.z > speed*modifier) velocity.z = speed*modifier;
+    if(velocity.z < -speed*modifier) velocity.z = -speed*modifier;
 
     x += velocity.x * dt;
     y += velocity.y * dt;
@@ -57,7 +58,7 @@ class Player extends AABB {
     velocity.z *= 0.92;
 
     isGrounded = false;
-    sprintModifier = 1;
+    modifier = 1;
     super.update();
   }
 
@@ -65,8 +66,9 @@ class Player extends AABB {
     //noFill();
     pushMatrix();
     translate(x, y, z);
+    rotateY(-rotationAngle);
     //rotate(angle);
-    //box(w, h, d);
+    box(w, h, d);
     popMatrix();
   }
 
@@ -110,16 +112,16 @@ class Player extends AABB {
     if(dy < 10) dy = 10;
     
 
-    rotationAngle = map(-dx, 0, width, 0, TWO_PI);
-    elevationAngle = map(dy, 0, height, 0, PI);
-    //rotationAngle = map(mouseX, 0, width, 0, TWO_PI);
-    //elevationAngle = map(mouseY, 0, height, 0, PI);
+    //rotationAngle = map(-dx, 0, width, 0, TWO_PI);
+    //elevationAngle = map(dy, 0, height, 0, PI);
+    rotationAngle = map(mouseX, 0, width, 0, TWO_PI);
+    elevationAngle = map(mouseY, 0, height, 0, PI);
     float rotationMultiplier = 1000;
-    float cameraOffset = 50;
+    float cameraOffset = 75;
 
-    float centerX = cos(rotationAngle) * sin(elevationAngle);
-    float centerY = cos(elevationAngle);
-    float centerZ = sin(rotationAngle) * sin(elevationAngle);
+    centerX = cos(rotationAngle) * sin(elevationAngle);
+    centerY = -cos(elevationAngle);
+    centerZ = sin(rotationAngle) * sin(elevationAngle);
     camera(x-(centerX*cameraOffset), y-75, z-(centerZ*cameraOffset), centerX*rotationMultiplier + x, centerY*rotationMultiplier + y, centerZ*rotationMultiplier + z, 0.0, 1.0, 0.0);
 
     println(centerX + " | " + centerY + " | " + centerZ + " | " + x + " | " + y + " | " + z);
