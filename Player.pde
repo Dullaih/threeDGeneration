@@ -7,6 +7,7 @@ class Player extends AABB {
   float modifier = 1;
   float acceleration = 20;
   float speed = 600;
+  PVector cameraPosition = new PVector();
 
   Player(float xPos, float yPos, float zPos) {
     x = xPos;
@@ -122,7 +123,7 @@ class Player extends AABB {
     centerZ = sin(rotationAngle) * sin(elevationAngle);
     camera(x-(centerX*cameraOffset), y-75, z-(centerZ*cameraOffset), centerX*rotationMultiplier + x, centerY*rotationMultiplier + y, centerZ*rotationMultiplier + z, 0.0, 1.0, 0.0);
     //float fov = PI/2;
-    //float cameraZ = (height/2.0) / tan(fov/2.5);
+    //float cameraZ = (height/2.0) / tan(fov/2);
     //perspective(fov, 1, cameraZ/10.0, cameraZ*10.0);
     //frustum(-40, 0, 0, 40, 40, 800);
 
