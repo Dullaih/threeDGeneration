@@ -18,10 +18,10 @@ class Player extends AABB {
 
   void update() {
     velocity.y += GRAVITY*dt;
-    
+
     playerCamera();
 
-    if(Keyboard.isDown(Keyboard.SHIFT) && isGrounded) {
+    if (Keyboard.isDown(Keyboard.SHIFT) && isGrounded) {
       modifier = 1.5;
     }
     if (Keyboard.isDown(Keyboard.LEFT)) {
@@ -43,11 +43,11 @@ class Player extends AABB {
     if (Keyboard.isDown(Keyboard.SPACE) && isGrounded) {
       velocity.y = -speed;
     }
-    
-    if(velocity.x > speed*modifier) velocity.x = speed*modifier;
-    if(velocity.x < -speed*modifier) velocity.x = -speed*modifier;
-    if(velocity.z > speed*modifier) velocity.z = speed*modifier;
-    if(velocity.z < -speed*modifier) velocity.z = -speed*modifier;
+
+    if (velocity.x > speed*modifier) velocity.x = speed*modifier;
+    if (velocity.x < -speed*modifier) velocity.x = -speed*modifier;
+    if (velocity.z > speed*modifier) velocity.z = speed*modifier;
+    if (velocity.z < -speed*modifier) velocity.z = -speed*modifier;
 
     x += velocity.x * dt;
     y += velocity.y * dt;
@@ -94,10 +94,8 @@ class Player extends AABB {
       // If we move the player up or down, the player must have hit a floor or ceiling, so we set vertical velocity to zero.
       velocity.z = 0;
       if (fix.z < 0) {
-        
       }
       if (fix.z > 0) {
-      
       }
     }
     // recalculate AABB (since we moved the object AND we might have other collisions to fix yet this frame):
@@ -108,21 +106,25 @@ class Player extends AABB {
 
     dx += width/2-mouseX;
     dy += height/2-mouseY;
-    if(dy > height) dy = height;
-    if(dy < 10) dy = 10;
-    
+    if (dy > height) dy = height;
+    if (dy < 10) dy = 10;
 
-    //rotationAngle = map(-dx, 0, width, 0, TWO_PI);
-    //elevationAngle = map(dy, 0, height, 0, PI);
-    rotationAngle = map(mouseX, 0, width, 0, TWO_PI);
-    elevationAngle = map(mouseY, 0, height, 0, PI);
+
+    rotationAngle = map(-dx, 0, width, 0, TWO_PI);
+    elevationAngle = map(dy, 0, height, 0, PI);
+    //rotationAngle = map(mouseX, 0, width, 0, TWO_PI);
+    //elevationAngle = map(mouseY, 0, height, 0, PI);
     float rotationMultiplier = 1000;
     float cameraOffset = 75;
 
     centerX = cos(rotationAngle) * sin(elevationAngle);
-    centerY = -cos(elevationAngle);
+    centerY = cos(elevationAngle);
     centerZ = sin(rotationAngle) * sin(elevationAngle);
     camera(x-(centerX*cameraOffset), y-75, z-(centerZ*cameraOffset), centerX*rotationMultiplier + x, centerY*rotationMultiplier + y, centerZ*rotationMultiplier + z, 0.0, 1.0, 0.0);
+    //float fov = PI/2;
+    //float cameraZ = (height/2.0) / tan(fov/2.5);
+    //perspective(fov, 1, cameraZ/10.0, cameraZ*10.0);
+    //frustum(-40, 0, 0, 40, 40, 800);
 
     println(centerX + " | " + centerY + " | " + centerZ + " | " + x + " | " + y + " | " + z);
   }

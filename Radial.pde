@@ -1,5 +1,8 @@
 class Radial {
   
+  PVector position, velocity;
+  boolean isDead;
+  
   Radial() {
   }
   
