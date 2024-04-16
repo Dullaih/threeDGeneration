@@ -28,14 +28,9 @@ void setup() {
 
   int offsetX = 150, offsetY = -150, offsetZ = 150;
 
-  for (int i = 0; i < floorWidth; i++) {
-    Tile t = new Tile(offsetX*i, 0, 0);
-    tiles.add(t);
-    for (int j = 0; j < floorLength; j++) {
-      Tile z = new Tile(offsetX*i, 0, offsetZ*j);
-      tiles.add(z);
-    }
-  }
+  Tile floor = new Tile(offsetX*7, 0, offsetZ*7);
+  floor.setSize(offsetX*(floorWidth-2), 0, offsetZ*(floorLength-2));
+  tiles.add(floor);
   for (int h = 0; h < 1; h++) {
     for (int i = 0; i < floorWidth-2; i++) {
       Tile t = new Tile(offsetX*i+offsetX, offsetY*h+offsetY, offsetZ);
@@ -84,6 +79,10 @@ void draw() {
     if (t.checkCollision(player)) {
       player.applyFix(player.findOverlapFix(t));
     }
+    if (player.camera.checkAABBCollision(t)) {
+      println("hit");
+    }
+    //else println("no");
   }
 
   player.update();

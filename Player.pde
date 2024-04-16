@@ -11,7 +11,7 @@ class Player extends AABB {
     y = yPos;
     z = zPos;
 
-    setSize(75, 75, 75);
+    setSize(100, 100, 100);
   }
 
   void update() {
@@ -65,7 +65,7 @@ class Player extends AABB {
     pushMatrix();
     translate(x, y, z);
     rotateY(-camera.rotationAngle);
-    box(w, h, d);
+    //box(w, h, d);
     popMatrix();
   }
 
