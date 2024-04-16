@@ -16,10 +16,10 @@ final float GRAVITY = 981;
 
 
 void setup() {
-  //size(1280, 720, P3D);
-  fullScreen(P3D);
+  size(1280, 720, P3D);
+  //fullScreen(P3D);
   //noCursor();
-  player = new Player(500, -2000, 500);
+  player = new Player(500, -1000, 500);
   try {
     robot = new Robot();
   }
@@ -75,7 +75,7 @@ void draw() {
 
   //UPDATE OBJECTS
 
-  robot.mouseMove(width/2, height/2);
+  //robot.mouseMove(width/2, height/2);
 
 
   for (int i = 0; i < tiles.size(); i++) {
