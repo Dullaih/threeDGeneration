@@ -6,7 +6,7 @@ class Bullet extends Radial {
   
   Bullet(float x, float y, float z, float rotation, float elevation, float speed) {
     position = new PVector(x, y, z);
-    rVelocity = new PVector(cos(rotation) * sin(elevation), cos(elevation), sin(rotation) * sin(elevation));
+    rVelocity = new PVector(cos(rotation) * sin(elevation), -cos(elevation), sin(rotation) * sin(elevation));
     this.speed = speed;
     setSize(5);
   }
