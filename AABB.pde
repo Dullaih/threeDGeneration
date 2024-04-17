@@ -2,6 +2,8 @@ class AABB {
   float x, y, z, w, h, d; // Location and Size of each AABB object.
   float halfW, halfH, halfD;
   float angle;
+  
+  
 
   float sideL;
   float sideR;

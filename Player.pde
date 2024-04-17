@@ -3,7 +3,7 @@ class Player extends AABB {
   boolean isGrounded;
   float modifier = 1;
   float acceleration = 20;
-  float speed = 600;
+  float maxSpeed = 600;
   Camera camera = new Camera();
 
   Player(float xPos, float yPos, float zPos) {
@@ -39,17 +39,23 @@ class Player extends AABB {
       velocity.z += sin(camera.rotationAngle)*-acceleration*modifier;
     }
     if (Keyboard.isDown(Keyboard.SPACE) && isGrounded) {
-      velocity.y = -speed;
+      velocity.y = -maxSpeed;
     }
+    
 
-    if (velocity.x > speed*modifier) velocity.x = speed*modifier;
-    if (velocity.x < -speed*modifier) velocity.x = -speed*modifier;
-    if (velocity.z > speed*modifier) velocity.z = speed*modifier;
-    if (velocity.z < -speed*modifier) velocity.z = -speed*modifier;
+    if (velocity.x > maxSpeed*modifier) velocity.x = maxSpeed*modifier;
+    if (velocity.x < -maxSpeed*modifier) velocity.x = -maxSpeed*modifier;
+    if (velocity.z > maxSpeed*modifier) velocity.z = maxSpeed*modifier;
+    if (velocity.z < -maxSpeed*modifier) velocity.z = -maxSpeed*modifier;
 
     x += velocity.x * dt;
     y += velocity.y * dt;
     z += velocity.z * dt;
+    
+    if(Mouse.onDown(Mouse.LEFT)) {
+      Bullet b = new Bullet(camera.position.x, camera.position.y, camera.position.z, camera.rotationAngle, camera.elevationAngle, 3000);
+      bullets.add(b);
+    }
 
     velocity.x *= 0.92;
     //velocity.y *= 0.95;

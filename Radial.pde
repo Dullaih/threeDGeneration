@@ -1,6 +1,6 @@
 class Radial {
   
-  PVector position = new PVector(), velocity = new PVector();
+  PVector position = new PVector(), rVelocity = new PVector();
   float radius;
   boolean isDead;
   

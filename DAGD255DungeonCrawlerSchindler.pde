@@ -16,8 +16,8 @@ final float GRAVITY = 981;
 
 
 void setup() {
-  size(1280, 720, P3D);
-  //fullScreen(P3D);
+  //size(1280, 720, P3D);
+  fullScreen(P3D);
   //noCursor();
   player = new Player(500, -1000, 500);
   try {
@@ -70,7 +70,7 @@ void draw() {
 
   //UPDATE OBJECTS
 
-  //robot.mouseMove(width/2, height/2);
+  robot.mouseMove(width/2, height/2);
 
 
   for (int i = 0; i < tiles.size(); i++) {
@@ -80,9 +80,19 @@ void draw() {
       player.applyFix(player.findOverlapFix(t));
     }
     if (player.camera.checkAABBCollision(t)) {
-      println("hit");
+      //println("hit");
+    }
+    for (int j = 0; j < bullets.size(); j++) {
+      Bullet b = bullets.get(j);
+      if(b.checkAABBCollision(t)) b.isDead = true;
     }
     //else println("no");
+  }
+
+  for (int i = 0; i < bullets.size(); i++) {
+    Bullet b = bullets.get(i);
+    b.update();
+    if (b.isDead) bullets.remove(b);
   }
 
   player.update();
@@ -97,6 +107,11 @@ void draw() {
   for (int i = 0; i < tiles.size(); i++) {
     Tile t = tiles.get(i);
     t.draw();
+  }
+
+  for (int i = 0; i < bullets.size(); i++) {
+    Bullet b = bullets.get(i);
+    b.draw();
   }
 
   //for (int i = 0; i < spawnTiles.size(); i++) {
