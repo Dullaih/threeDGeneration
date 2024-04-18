@@ -20,10 +20,10 @@ final float GRAVITY = 981;
 
 
 void setup() {
-  //size(1280, 720, P3D);
-  fullScreen(P3D);
+  size(1280, 720, P3D);
+  //fullScreen(P3D);
   //noCursor();
-  player = new Player(offsetX*(halfFloorW-1), -2000, offsetZ*2);
+  player = new Player(offsetX*(halfFloorW-1), -2500, offsetZ*2);
   try {
     robot = new Robot();
   }
@@ -56,6 +56,9 @@ void setup() {
       }
     }
   }
+  
+  Enemy e = new Enemy(800, -150, 2000);
+  enemies.add(e);
 }
 
 
@@ -73,7 +76,7 @@ void draw() {
 
   //UPDATE OBJECTS
 
-  robot.mouseMove(width/2, height/2); //lock mouse to center of screen
+  //robot.mouseMove(width/2, height/2); //lock mouse to center of screen
 
 
   for (int i = 0; i < tiles.size(); i++) { //visible tile collisions
@@ -95,15 +98,18 @@ void draw() {
   for (int i = 0; i < enemies.size(); i++) { //enemy collisions
     Enemy e = enemies.get(i);
     e.update();
+    Radial detect = e.detectionRadius;
     for (int j = 0; j < bullets.size(); j++) { //with bullets
       Bullet b = bullets.get(j);
       if(b.checkAABBCollision(e)) {
         e.isDead = true; b.isDead = true;
       }
     }
-    if (e.detectionRadius.checkAABBCollision(player)) { //with player entering their area
-      e.lockOn();
+    if (detect.checkAABBCollision(player)) { //with player entering their area
+      e.lockedOn = true;
+      println("locked");
     }
+    else e.lockedOn = false;
     if (e.isDead) enemies.remove(e);
   }
   
@@ -130,6 +136,11 @@ void draw() {
   for (int i = 0; i < bullets.size(); i++) {
     Bullet b = bullets.get(i);
     b.draw();
+  }
+  
+  for (int i = 0; i < enemies.size(); i++) {
+    Enemy e = enemies.get(i);
+    e.draw();
   }
 
   //for (int i = 0; i < spawnTiles.size(); i++) {
