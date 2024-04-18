@@ -19,8 +19,8 @@ class Player extends AABB {
     
     camera.update(x, y, z);
 
-    if (Keyboard.isDown(Keyboard.SHIFT) && isGrounded) {
-      modifier = 1.5;
+    if (Keyboard.onDown(Keyboard.SHIFT)) {
+      modifier = 40;
     }
     if (Keyboard.isDown(Keyboard.LEFT)) {
       velocity.x += sin(camera.rotationAngle)*acceleration*modifier;
@@ -40,8 +40,7 @@ class Player extends AABB {
     }
     if (Keyboard.isDown(Keyboard.SPACE) && isGrounded) {
       velocity.y = -maxSpeed;
-    }
-    
+    }  
 
     if (velocity.x > maxSpeed*modifier) velocity.x = maxSpeed*modifier;
     if (velocity.x < -maxSpeed*modifier) velocity.x = -maxSpeed*modifier;
@@ -62,7 +61,8 @@ class Player extends AABB {
     velocity.z *= 0.92;
 
     isGrounded = false;
-    modifier = 1;
+    if(modifier > 1) modifier *= 0.8;
+    else modifier = 1;
     super.update();
   }
 

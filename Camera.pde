@@ -22,9 +22,9 @@ class Camera extends Radial {
     float distanceMultiplier = 1000;
     float cameraOffset = 75;
 
-    centerX = cos(rotationAngle) * sin(elevationAngle);
-    centerY = cos(elevationAngle);
-    centerZ = sin(rotationAngle) * sin(elevationAngle);
+    centerX = cos(rotationAngle) * sin(elevationAngle); //forward back distance
+    centerY = cos(elevationAngle); //up down rotation
+    centerZ = sin(rotationAngle) * sin(elevationAngle); //left right rotation
     position.set(x-(centerX*cameraOffset), y-100, z-(centerZ*cameraOffset));
     cameraEndpoint.set(centerX*distanceMultiplier + x, centerY*distanceMultiplier + y, centerZ*distanceMultiplier + z);
     camera(position.x, position.y, position.z, cameraEndpoint.x, cameraEndpoint.y, cameraEndpoint.z, 0.0, 1.0, 0.0);

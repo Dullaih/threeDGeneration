@@ -3,8 +3,6 @@ class AABB {
   float halfW, halfH, halfD;
   float angle;
   
-  
-
   float sideL;
   float sideR;
   float sideT;

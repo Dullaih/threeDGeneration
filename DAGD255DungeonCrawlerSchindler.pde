@@ -4,7 +4,9 @@ Robot robot;
 
 float dt = 0;
 float prevTime = 0;
-float floorWidth = 15, floorLength = 15, wallHeight = 3;
+float floorWidth = 15, floorLength = 49, wallHeight = 6; //only use odd numbers for floor length/width
+int offsetX = 150, offsetY = -150, offsetZ = 150;
+int halfFloorW = (int) floorWidth/2, halfFloorL = (int) floorLength/2;
 PVector cameraEndpoint = new PVector();
 
 Player player;
@@ -21,38 +23,37 @@ void setup() {
   //size(1280, 720, P3D);
   fullScreen(P3D);
   //noCursor();
-  player = new Player(500, -3000, 500);
+  player = new Player(offsetX*(halfFloorW-1), -2000, offsetZ*2);
   try {
     robot = new Robot();
   }
   catch (Exception e) {
   }
 
-  int offsetX = 150, offsetY = -150, offsetZ = 150;
-
-  Tile floor = new Tile(offsetX*7, 0, offsetZ*7);
-  floor.setSize(offsetX*(floorWidth-2), 0, offsetZ*(floorLength-2));
+  Tile floor = new Tile(offsetX*halfFloorW, 150, offsetZ*halfFloorL); //make floor
+  floor.setSize(offsetX*(floorWidth-2), 150, offsetZ*(floorLength-2));
   tiles.add(floor);
-  for (int h = 0; h < 1; h++) {
-    for (int i = 0; i < floorWidth-2; i++) {
-      Tile t = new Tile(offsetX*i+offsetX, offsetY*h+offsetY, offsetZ);
-      spawnTiles.add(t);
-      for (int j = 0; j < floorLength-2; j++) {
-        Tile z = new Tile(offsetX*i+offsetX, offsetY*h+offsetY, offsetZ*j+offsetZ);
-        spawnTiles.add(z);
-      }
-    }
-  }
-
-  for (int i = 0; i < 4; i++) {
+  
+  for (int i = 0; i < 4; i++) { //make walls
     if (i < 2) {
-      Tile t = new Tile(offsetX*7, -150, offsetZ*(floorWidth-1)*i);
-      t.setSize(offsetX*(floorLength-2), 500, 150);
+      Tile t = new Tile(offsetX*halfFloorW, -300, offsetZ*(floorLength-1)*i);
+      t.setSize(offsetX*(floorWidth-2), -offsetY*wallHeight, 150);
       tiles.add(t);
     } else {
-      Tile t = new Tile(offsetX*(floorLength-1)*(i-2), -150, offsetZ*7);
-      t.setSize(150, 500, offsetZ*(floorWidth-2));
+      Tile t = new Tile(offsetX*(floorWidth-1)*(i-2), -300, offsetZ*halfFloorL);
+      t.setSize(150, -offsetY*wallHeight, offsetZ*(floorLength-2));
       tiles.add(t);
+    }
+  }
+  
+  for (int h = 0; h < wallHeight; h++) { //generate spawn areas
+    for (int i = 0; i < floorWidth-2; i++) {
+      Tile t = new Tile(offsetX*i+offsetX, offsetY*h-offsetY/2, offsetZ);
+      spawnTiles.add(t);
+      for (int j = 0; j < floorLength-2; j++) {
+        Tile z = new Tile(offsetX*i+offsetX, offsetY*h-offsetY/2, offsetZ*j+offsetZ);
+        spawnTiles.add(z);
+      }
     }
   }
 }
@@ -72,26 +73,41 @@ void draw() {
 
   //UPDATE OBJECTS
 
-  robot.mouseMove(width/2, height/2);
+  robot.mouseMove(width/2, height/2); //lock mouse to center of screen
 
 
-  for (int i = 0; i < tiles.size(); i++) {
+  for (int i = 0; i < tiles.size(); i++) { //visible tile collisions
     Tile t = tiles.get(i);
     t.update();
-    if (t.checkCollision(player)) {
+    if (t.checkCollision(player)) { //with player
       player.applyFix(player.findOverlapFix(t));
     }
-    if (player.camera.checkAABBCollision(t)) {
+    if (player.camera.checkAABBCollision(t)) { //with camera
       //println("hit");
     }
-    for (int j = 0; j < bullets.size(); j++) {
+    for (int j = 0; j < bullets.size(); j++) { //with bullets
       Bullet b = bullets.get(j);
-      if(b.checkAABBCollision(t)) b.isDead = true;
+      if (b.checkAABBCollision(t)) b.isDead = true;
     }
     //else println("no");
   }
 
-  for (int i = 0; i < bullets.size(); i++) {
+  for (int i = 0; i < enemies.size(); i++) { //enemy collisions
+    Enemy e = enemies.get(i);
+    e.update();
+    for (int j = 0; j < bullets.size(); j++) { //with bullets
+      Bullet b = bullets.get(j);
+      if(b.checkAABBCollision(e)) {
+        e.isDead = true; b.isDead = true;
+      }
+    }
+    if (e.detectionRadius.checkAABBCollision(player)) { //with player entering their area
+      e.lockOn();
+    }
+    if (e.isDead) enemies.remove(e);
+  }
+  
+  for (int i = 0; i < bullets.size(); i++) { //bullet update
     Bullet b = bullets.get(i);
     b.update();
     if (b.isDead) bullets.remove(b);
