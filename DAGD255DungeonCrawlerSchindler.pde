@@ -5,6 +5,7 @@ Robot robot;
 float dt = 0;
 float prevTime = 0;
 float floorWidth = 15, floorLength = 15, wallHeight = 3;
+PVector cameraEndpoint = new PVector();
 
 Player player;
 ArrayList<Enemy> enemies = new ArrayList();
@@ -17,8 +18,8 @@ final float GRAVITY = 981;
 
 
 void setup() {
-  size(1280, 720, P3D);
-  //fullScreen(P3D);
+  //size(1280, 720, P3D);
+  fullScreen(P3D);
   //noCursor();
   player = new Player(500, -1200, 500);
   try {
@@ -71,7 +72,7 @@ void draw() {
 
   //UPDATE OBJECTS
 
-  //robot.mouseMove(width/2, height/2);
+  robot.mouseMove(width/2, height/2);
 
 
   for (int i = 0; i < tiles.size(); i++) {

@@ -4,9 +4,10 @@ class Bullet extends Radial {
   PVector velocity = new PVector();
   float lifetime = 1;
   
-  Bullet(float x, float y, float z, float rotation, float elevation, float speed) {
-    position = new PVector(x, y, z);
-    rVelocity = new PVector(cos(rotation) * sin(elevation), -cos(elevation), sin(rotation) * sin(elevation));
+  Bullet(PVector position, float speed) {
+    this.position.set(position);
+    PVector difference = PVector.sub(cameraEndpoint, position);
+    rVelocity = difference.normalize();
     this.speed = speed;
     setSize(5);
   }
