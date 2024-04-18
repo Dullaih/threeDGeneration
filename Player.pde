@@ -15,7 +15,7 @@ class Player extends AABB {
   }
 
   void update() {
-    velocity.y += GRAVITY*dt;
+    velocity.y += GRAVITY*2*dt;
     
     camera.update(x, y, z);
 
@@ -87,7 +87,7 @@ class Player extends AABB {
       // If we move the player up or down, the player must have hit a floor or ceiling, so we set vertical velocity to zero.
       velocity.y = 0;
       if (fix.y < 0) {
-        isGrounded = true;
+        isGrounded = true;        
       }
       if (fix.y > 0) {
         // If we move the player down, we must have hit our head on a ceiling.

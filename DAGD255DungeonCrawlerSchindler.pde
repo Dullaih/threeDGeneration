@@ -21,7 +21,7 @@ void setup() {
   //size(1280, 720, P3D);
   fullScreen(P3D);
   //noCursor();
-  player = new Player(500, -1200, 500);
+  player = new Player(500, -3000, 500);
   try {
     robot = new Robot();
   }

@@ -1,18 +1,23 @@
 class Enemy extends AABB {
 
-  Enemy(float x, float y) {
+  Enemy(float x, float y, float z) {
     this.x = x;
     this.y = y;
+    this.z = z;
     setSize(150, 150, 150);
   }
 
   void update() {
-    
+
     super.update();
   }
 
   void draw() {
-    fill(200, 0, 0);
-    box(x - halfW, y - halfW, 60);
+    fill(0);
+    stroke(255);
+    pushMatrix();
+    translate(x, y, z);
+    box(w, h, d);
+    popMatrix();
   }
 }
