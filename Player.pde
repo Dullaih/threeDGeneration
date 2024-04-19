@@ -52,7 +52,7 @@ class Player extends AABB {
     z += velocity.z * dt;
     
     if(Mouse.onDown(Mouse.LEFT)) {
-      Bullet b = new Bullet(camera.position, 2000);
+      Bullet b = new Bullet(camera.position, 2000, cameraEndpoint);
       bullets.add(b);
     }
 

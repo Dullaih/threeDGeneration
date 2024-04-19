@@ -23,7 +23,7 @@ void setup() {
   size(1280, 720, P3D);
   //fullScreen(P3D);
   //noCursor();
-  player = new Player(offsetX*(halfFloorW-1), -2500, offsetZ*2);
+  player = new Player(offsetX*(halfFloorW-1), -3000, offsetZ*2);
   try {
     robot = new Robot();
   }
@@ -107,7 +107,6 @@ void draw() {
     }
     if (detect.checkAABBCollision(player)) { //with player entering their area
       e.lockedOn = true;
-      println("locked");
     }
     else e.lockedOn = false;
     if (e.isDead) enemies.remove(e);
@@ -117,6 +116,12 @@ void draw() {
     Bullet b = bullets.get(i);
     b.update();
     if (b.isDead) bullets.remove(b);
+  }
+  
+  for (int i = 0; i < enemyBullets.size(); i++) { //bullet update
+    Bullet b = enemyBullets.get(i);
+    b.update();
+    if (b.isDead) enemyBullets.remove(b);
   }
 
   player.update();
@@ -141,6 +146,11 @@ void draw() {
   for (int i = 0; i < enemies.size(); i++) {
     Enemy e = enemies.get(i);
     e.draw();
+  }
+  
+  for (int i = 0; i < enemyBullets.size(); i++) {
+    Bullet b = enemyBullets.get(i);
+    b.draw();
   }
 
   //for (int i = 0; i < spawnTiles.size(); i++) {
