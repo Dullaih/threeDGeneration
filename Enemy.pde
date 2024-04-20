@@ -6,6 +6,7 @@ class Enemy extends AABB {
   float shootCD = 3;
   PVector position;
   PVector forwardVector = new PVector();
+  float pYaw = 0, dYaw = 0;
 
   Enemy(float x, float y, float z) {
     this.x = x;
@@ -26,6 +27,7 @@ class Enemy extends AABB {
       shoot();
     }
     
+    pYaw = yaw;
     super.update();
   }
 
@@ -50,7 +52,10 @@ class Enemy extends AABB {
     xz = (float) sqrt(direction.x * direction.x + direction.z * direction.z);
     yaw = (float) atan2(direction.x, direction.z);
     pitch = (float) atan2(-direction.y, xz);
-    PVector endVector = new PVector (yaw, pitch);
+    if(yaw == abs(yaw)) dYaw += abs(yaw) - abs(pYaw);
+    else dYaw -= abs(yaw) - abs(pYaw);
+    //println(dYaw);
+    PVector endVector = new PVector (dYaw, pitch);
     forwardVector = easing(forwardVector, endVector, 0.5);
   }
   
