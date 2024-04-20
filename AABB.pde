@@ -2,7 +2,7 @@ class AABB {
   float x, y, z, w, h, d; // Location and Size of each AABB object.
   float halfW, halfH, halfD;
   float angle;
-  
+
   float sideL;
   float sideR;
   float sideT;
@@ -12,6 +12,9 @@ class AABB {
 
   PVector velocity = new PVector();
   boolean isDead = false;
+
+  PVector forwardVector = new PVector();
+  PVector ease  = new PVector();
 
   AABB() {
     // All child classes of AABB must call the setSize() function
@@ -52,12 +55,12 @@ class AABB {
     if (sideF >= other.sideD) return false;
     return true;
   }
-  
+
   //boolean checkPointCollision (PVector point) {
   //  if (point.x <= sideL && point.x >= sideR && point.y <= sideT && point.y >= sideB && point.z <= sideD && point.z >= sideF) return true;
   //  return false;
   //}
-  
+
   /**
    * This method finds the best solution for moving (this) AABB out from an (other)
    * AABB object. The method compares four possible solutions: moving (this) box
@@ -104,7 +107,7 @@ class AABB {
     } else {
       result.x = result.y = 0;
     }
-    
+
     //println(result);
 
     return result;
@@ -140,5 +143,15 @@ class AABB {
     }
     // recalculate AABB (since we moved the object AND we might have other collisions to fix yet this frame):
     calcAABB();
+  }
+
+  PVector easing(PVector start, PVector end, float time) {
+    float dx, dy, dz;
+    PVector ease = PVector.sub(end, start);
+    dx = ease.x*(dt/time);
+    dy = ease.y*(dt/time);
+    dz = ease.z*(dt/time);
+    ease = PVector.add(start, new PVector(dx, dy, dz));
+    return ease;
   }
 }

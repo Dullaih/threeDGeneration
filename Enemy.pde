@@ -5,6 +5,7 @@ class Enemy extends AABB {
   float yaw = 0, pitch = 0, xz = 0;
   float shootCD = 3;
   PVector position;
+  PVector forwardVector = new PVector();
 
   Enemy(float x, float y, float z) {
     this.x = x;
@@ -14,6 +15,7 @@ class Enemy extends AABB {
     detectionRadius.setSize(1200);
     detectionRadius.position.set(x, y, z);
     position = new PVector(x, y, z);
+    forwardVector.set(yaw, pitch);
   }
 
   void update() {
@@ -23,6 +25,7 @@ class Enemy extends AABB {
       lockOn();
       shoot();
     }
+    
     super.update();
   }
 
@@ -31,8 +34,8 @@ class Enemy extends AABB {
     stroke(0);
     pushMatrix();
     translate(x, y, z);
-    rotateY(yaw);
-    rotateX(pitch);
+    rotateY(forwardVector.x);
+    rotateX(forwardVector.y);
     box(w, h, d);
     translate(0, 0, halfD/1.5);
     sphere(halfW/2);
@@ -43,10 +46,12 @@ class Enemy extends AABB {
   void lockOn() {
     PVector direction = PVector.sub(player.camera.position, position);
     direction = direction.normalize();
-
-    yaw = (float) atan2(direction.x, direction.z);
+    
     xz = (float) sqrt(direction.x * direction.x + direction.z * direction.z);
+    yaw = (float) atan2(direction.x, direction.z);
     pitch = (float) atan2(-direction.y, xz);
+    PVector endVector = new PVector (yaw, pitch);
+    forwardVector = easing(forwardVector, endVector, 0.5);
   }
   
   void shoot() {
