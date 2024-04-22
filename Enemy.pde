@@ -13,7 +13,7 @@ class Enemy extends AABB {
     this.y = y;
     this.z = z;
     setSize(150, 150, 150);
-    detectionRadius.setSize(1200);
+    detectionRadius.setSize(2000);
     detectionRadius.position.set(x, y, z);
     position = new PVector(x, y, z);
     forwardVector.set(yaw, pitch);

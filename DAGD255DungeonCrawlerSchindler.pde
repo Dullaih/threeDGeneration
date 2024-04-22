@@ -4,7 +4,7 @@ Robot robot;
 
 float dt = 0;
 float prevTime = 0;
-float floorWidth = 15, floorLength = 49, wallHeight = 6; //only use odd numbers for floor length/width
+float floorWidth = 21, floorLength = 69, wallHeight = 6; //only use odd numbers for floor length/width
 int offsetX = 150, offsetY = -150, offsetZ = 150;
 int halfFloorW = (int) floorWidth/2, halfFloorL = (int) floorLength/2;
 PVector cameraEndpoint = new PVector();
@@ -30,7 +30,7 @@ void setup() {
   catch (Exception e) {
   }
 
-  Tile floor = new Tile(offsetX*halfFloorW, 150, offsetZ*halfFloorL); //make floor
+  Tile floor = new Tile(offsetX*halfFloorW, 225, offsetZ*halfFloorL); //make floor
   floor.setSize(offsetX*(floorWidth-2), 150, offsetZ*(floorLength-2));
   tiles.add(floor);
   
@@ -48,17 +48,29 @@ void setup() {
   
   for (int h = 0; h < wallHeight; h++) { //generate spawn areas
     for (int i = 0; i < floorWidth-2; i++) {
-      Tile t = new Tile(offsetX*i+offsetX, offsetY*h-offsetY/2, offsetZ);
+      Tile t = new Tile(offsetX*i+offsetX, offsetY*h-offsetY/2, offsetZ*8);
       spawnTiles.add(t);
-      for (int j = 0; j < floorLength-2; j++) {
+      for (int j = 8; j < floorLength-2; j++) {
         Tile z = new Tile(offsetX*i+offsetX, offsetY*h-offsetY/2, offsetZ*j+offsetZ);
         spawnTiles.add(z);
       }
     }
   }
   
-  Enemy e = new Enemy(800, -150, 2000);
-  enemies.add(e);
+  for(int i = 0; i < 10; i++) {
+    Tile currTile = spawnTiles.get((int)random(spawnTiles.size()-1));
+    Enemy e = new Enemy(currTile.x, currTile.y, currTile.z);
+    enemies.add(e);
+    for(int j = (int)currTile.y; j < 0; j -= offsetY) {
+      for(int k = 0; k < spawnTiles.size(); k++) {
+        Tile z = spawnTiles.get(k);
+        if(z.x == currTile.x && z.y == j - offsetY && z.z == currTile.z) {
+          tiles.add(z);
+          spawnTiles.remove(z);
+        }
+      }
+    }
+  }
 }
 
 
