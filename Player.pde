@@ -3,7 +3,7 @@ class Player extends AABB {
   boolean isGrounded;
   float modifier = 1;
   float acceleration = 20;
-  float maxSpeed = 600;
+  float maxSpeed = 800;
   Camera camera = new Camera();
 
   Player(float xPos, float yPos, float zPos) {
@@ -54,6 +54,9 @@ class Player extends AABB {
     if(Mouse.onDown(Mouse.LEFT)) {
       Bullet b = new Bullet(camera.position, 2000, cameraEndpoint);
       bullets.add(b);
+    }
+    if(Mouse.onDown(Mouse.RIGHT)) {
+      hook = new Grapple(camera.position, 500, cameraEndpoint);
     }
 
     velocity.x *= 0.92;

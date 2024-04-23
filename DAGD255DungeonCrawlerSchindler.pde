@@ -2,6 +2,8 @@ import java.awt.Robot;
 
 Robot robot;
 
+Grapple hook;
+
 float dt = 0;
 float prevTime = 0;
 float floorWidth = 21, floorLength = 69, wallHeight = 6; //only use odd numbers for floor length/width
@@ -135,7 +137,9 @@ void draw() {
     b.update();
     if (b.isDead) enemyBullets.remove(b);
   }
-
+  
+  if(hook != null) hook.update(new PVector(player.x, player.y, player.z));
+  
   player.update();
 
   //LATE UPDATE OBJECTS
@@ -169,6 +173,8 @@ void draw() {
   //  Tile t = spawnTiles.get(i);
   //  t.draw();
   //}
+  
+  if(hook != null) hook.draw();
 
   player.draw();
 
