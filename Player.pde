@@ -56,7 +56,7 @@ class Player extends AABB {
       bullets.add(b);
     }
     if(Mouse.onDown(Mouse.RIGHT)) {
-      hook = new Grapple(camera.position, 500, cameraEndpoint);
+      hook = new Grapple(camera.position, 2000, cameraEndpoint);
     }
 
     velocity.x *= 0.92;

@@ -2,15 +2,16 @@ class Grapple {
 
   float speed;
   PVector velocity = new PVector(), rVelocity = new PVector(), position = new PVector(), start = new PVector();
-  float lifetime = 1;
   boolean isDead;
   PVector tl = new PVector(), tr = new PVector(), bl = new PVector(), br = new PVector(), hook = new PVector();
+  boolean max;
 
   Grapple(PVector position, float speed, PVector target) {
     this.position.set(position);
     PVector difference = PVector.sub(target, position);
     rVelocity = difference.normalize();
     this.speed = speed;
+    max = false;
   }
 
   void update(PVector start) {
@@ -22,22 +23,17 @@ class Grapple {
     velocity.y = rVelocity.y*speed;
     velocity.z = rVelocity.z*speed;
 
-    if (abs(PVector.sub(start, hook).z) > 1000) {
-      position.x -= velocity.x*dt;
-      position.y -= velocity.y*dt;
-      position.z -= velocity.z*dt;
-    } else if (abs(PVector.sub(start, hook).z) < 10) {
-    } else {
+    if(!max) {
       position.x += velocity.x*dt;
       position.y += velocity.y*dt;
       position.z += velocity.z*dt;
     }
 
     hook.set(position.x, position.y, position.z);
-
-
-    lifetime -= dt;
-    if (lifetime <= 0) isDead = true;
+    
+    if (abs(PVector.sub(start, hook).z) > 1500) {
+      max = true;
+    }
   }
 
   void draw() {
@@ -66,6 +62,10 @@ class Grapple {
     vertex(hook.x, hook.y, hook.z);
 
     endShape();
+    if(max) {
+      translate(hook.x, hook.y, hook.z);
+      sphere(10);
+    }
     popMatrix();
   }
 }

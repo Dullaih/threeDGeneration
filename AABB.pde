@@ -56,10 +56,9 @@ class AABB {
     return true;
   }
 
-  //boolean checkPointCollision (PVector point) {
-  //  if (point.x <= sideL && point.x >= sideR && point.y <= sideT && point.y >= sideB && point.z <= sideD && point.z >= sideF) return true;
-  //  return false;
-  //}
+  boolean checkPointCollision(PVector point) {
+    return (point.x >= sideL && point.x <= sideR && point.y >= sideT && point.y <= sideB && point.z >= sideF && point.z <= sideD);
+  }
 
   /**
    * This method finds the best solution for moving (this) AABB out from an (other)
@@ -79,8 +78,8 @@ class AABB {
     float moveR = other.sideR - sideL; // how far to move this box so it's to the RIGHT of the other box.
     float moveU = other.sideT - sideB; // how far to move this box so it's to the TOP of the other box.
     float moveD = other.sideB - sideT; // how far to move this box so it's to the BOTTOM of the other box.
-    float moveB = other.sideD - sideF;
-    float moveF = other.sideF - sideD;
+    float moveB = other.sideD - sideF; // how far to move this box so it's to the BACK of the other box.
+    float moveF = other.sideF - sideD; // how far to move this box so it's to the FRONT of the other box.
 
     // The above values are potentially negative numbers; the sign indicates what direction to move.
     // But we want to find out which ABSOLUTE value is smallest, so we get a non-signed version of each.
