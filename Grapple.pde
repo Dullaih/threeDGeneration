@@ -1,17 +1,17 @@
 class Grapple {
 
   float speed;
-  PVector velocity = new PVector(), rVelocity = new PVector(), position = new PVector(), start = new PVector();
+  PVector velocity = new PVector(), rVelocity = new PVector(), position = new PVector(), start = new PVector(), initial = new PVector();
   boolean isDead;
   PVector tl = new PVector(), tr = new PVector(), bl = new PVector(), br = new PVector(), hook = new PVector();
-  boolean max;
+  boolean max, min;
 
   Grapple(PVector position, float speed, PVector target) {
     this.position.set(position);
+    initial.set(position);
     PVector difference = PVector.sub(target, position);
     rVelocity = difference.normalize();
     this.speed = speed;
-    max = false;
   }
 
   void update(PVector start) {
@@ -19,20 +19,35 @@ class Grapple {
     tr.set(start.x+5, start.y-10, start.z);
     bl.set(start.x-5, start.y, start.z);
     br.set(start.x+5, start.y, start.z);
-    velocity.x = rVelocity.x*speed;
-    velocity.y = rVelocity.y*speed;
-    velocity.z = rVelocity.z*speed;
+    if (!max) {
+      velocity.x = rVelocity.x*speed;
+      velocity.y = rVelocity.y*speed;
+      velocity.z = rVelocity.z*speed;
+    }
+    else if (!min){
+      velocity.x = -rVelocity.x*speed;
+      velocity.y = -rVelocity.y*speed;
+      velocity.z = -rVelocity.z*speed;
+    }
+    else {
+      velocity.x = 0;
+      velocity.y = 0;
+      velocity.z = 0;
+    }
 
-    if(!max) {
       position.x += velocity.x*dt;
       position.y += velocity.y*dt;
       position.z += velocity.z*dt;
-    }
 
     hook.set(position.x, position.y, position.z);
-    
-    if (abs(PVector.sub(start, hook).z) > 1500) {
+
+    if (abs(PVector.sub(initial, hook).z) > 1500) {
       max = true;
+      min = false;
+    }
+    if (abs(PVector.sub(initial, hook).z) < 25 && max) {
+      min = true;
+      //max = false;
     }
   }
 
@@ -62,7 +77,7 @@ class Grapple {
     vertex(hook.x, hook.y, hook.z);
 
     endShape();
-    if(max) {
+    if (max) {
       translate(hook.x, hook.y, hook.z);
       sphere(10);
     }

@@ -138,7 +138,7 @@ void draw() {
     if (b.isDead) enemyBullets.remove(b);
   }
   
-  if(hook != null) hook.update(new PVector(player.x, player.y, player.z));
+  if(hook != null && !hook.min) hook.update(new PVector(player.x, player.y, player.z));
   
   player.update();
 
@@ -174,7 +174,7 @@ void draw() {
   //  t.draw();
   //}
   
-  if(hook != null) hook.draw();
+  if(hook != null && !hook.min) hook.draw();
 
   player.draw();
 
