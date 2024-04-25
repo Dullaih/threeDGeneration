@@ -59,7 +59,7 @@ void setup() {
     }
   }
   
-  for(int i = 0; i < 10; i++) {
+  for(int i = 0; i < 10; i++) { //generate enemies
     Tile currTile = spawnTiles.get((int)random(spawnTiles.size()-1));
     Enemy e = new Enemy(currTile.x, currTile.y, currTile.z);
     enemies.add(e);
@@ -72,6 +72,7 @@ void setup() {
         }
       }
     }
+    spawnTiles.remove(currTile);
   }
 }
 

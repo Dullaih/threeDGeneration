@@ -23,25 +23,29 @@ class Grapple {
       velocity.x = rVelocity.x*speed;
       velocity.y = rVelocity.y*speed;
       velocity.z = rVelocity.z*speed;
-    }
-    else if (!min){
+    } else if (!min) {
       velocity.x = -rVelocity.x*speed;
       velocity.y = -rVelocity.y*speed;
       velocity.z = -rVelocity.z*speed;
-    }
-    else {
+    } else {
       velocity.x = 0;
       velocity.y = 0;
       velocity.z = 0;
     }
+    
+    //for (int i = 0; i < 20; i++) {
+    //  position.x = lerp(initial.x, velocity.x, i/20);
+    //  position.y = lerp(initial.y, velocity.y, i/20);
+    //  position.z = lerp(initial.z, velocity.z, i/20);
+    //}
 
-      position.x += velocity.x*dt;
-      position.y += velocity.y*dt;
-      position.z += velocity.z*dt;
+    position.x += velocity.x*dt;
+    position.y += velocity.y*dt;
+    position.z += velocity.z*dt;
 
     hook.set(position.x, position.y, position.z);
 
-    if (abs(PVector.sub(initial, hook).z) > 1500) {
+    if (abs(PVector.sub(initial, hook).x) > 1500 || abs(PVector.sub(initial, hook).y) > 1500 || abs(PVector.sub(initial, hook).z) > 1500) {
       max = true;
       min = false;
     }
@@ -77,10 +81,11 @@ class Grapple {
     vertex(hook.x, hook.y, hook.z);
 
     endShape();
-    if (max) {
-      translate(hook.x, hook.y, hook.z);
-      sphere(10);
-    }
+    
+    
+    translate(hook.x, hook.y, hook.z);
+    sphere(10);
+    
     popMatrix();
   }
 }
