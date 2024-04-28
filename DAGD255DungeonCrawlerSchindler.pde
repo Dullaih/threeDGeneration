@@ -2,7 +2,7 @@ import java.awt.Robot;
 
 Robot robot;
 
-Grapple hook;
+Grapple grapple;
 
 float dt = 0;
 float prevTime = 0;
@@ -26,6 +26,7 @@ void setup() {
   //fullScreen(P3D);
   //noCursor();
   player = new Player(offsetX*(halfFloorW-1), -3000, offsetZ*2);
+  grapple = new Grapple(player.camera.position, 2000, cameraEndpoint);
   try {
     robot = new Robot();
   }
@@ -107,7 +108,9 @@ void draw() {
       Bullet b = bullets.get(j);
       if (b.checkAABBCollision(t)) b.isDead = true;
     }
-    //else println("no");
+    if(t.checkPointCollision(grapple.hook) && !grapple.min) { //with grapple
+      grapple.colliding = true;
+    }
   }
 
   for (int i = 0; i < enemies.size(); i++) { //enemy collisions
@@ -139,7 +142,7 @@ void draw() {
     if (b.isDead) enemyBullets.remove(b);
   }
   
-  if(hook != null && !hook.min) hook.update(new PVector(player.x, player.y, player.z));
+  if(grapple != null && !grapple.min) grapple.update(new PVector(player.x, player.y, player.z));
   
   player.update();
 
@@ -175,7 +178,7 @@ void draw() {
   //  t.draw();
   //}
   
-  if(hook != null && !hook.min) hook.draw();
+  if(grapple != null && !grapple.max && !grapple.min) grapple.draw();
 
   player.draw();
 

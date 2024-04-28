@@ -1,24 +1,25 @@
 class Grapple {
 
   float speed;
-  PVector velocity = new PVector(), rVelocity = new PVector(), position = new PVector(), start = new PVector(), initial = new PVector();
+  PVector velocity = new PVector(), rVelocity = new PVector(), position = new PVector(), playerPos = new PVector(), initial = new PVector();
   boolean isDead;
-  PVector tl = new PVector(), tr = new PVector(), bl = new PVector(), br = new PVector(), hook = new PVector();
-  boolean max, min;
+  PVector tl = new PVector(), tr = new PVector(), bl = new PVector(), br = new PVector(), hook = new PVector(), difference = new PVector();
+  boolean max, min, colliding;
 
   Grapple(PVector position, float speed, PVector target) {
     this.position.set(position);
     initial.set(position);
-    PVector difference = PVector.sub(target, position);
+    difference = PVector.sub(target, position);
     rVelocity = difference.normalize();
     this.speed = speed;
+    hook.set(position.x, position.y, position.z);
   }
 
-  void update(PVector start) {
-    tl.set(start.x-5, start.y-10, start.z);
-    tr.set(start.x+5, start.y-10, start.z);
-    bl.set(start.x-5, start.y, start.z);
-    br.set(start.x+5, start.y, start.z);
+  void update(PVector playerPos) {
+    tl.set(playerPos.x-5, playerPos.y-10, playerPos.z);
+    tr.set(playerPos.x+5, playerPos.y-10, playerPos.z);
+    bl.set(playerPos.x-5, playerPos.y, playerPos.z);
+    br.set(playerPos.x+5, playerPos.y, playerPos.z);
     if (!max) {
       velocity.x = rVelocity.x*speed;
       velocity.y = rVelocity.y*speed;
@@ -27,7 +28,8 @@ class Grapple {
       velocity.x = -rVelocity.x*speed;
       velocity.y = -rVelocity.y*speed;
       velocity.z = -rVelocity.z*speed;
-    } else {
+    } 
+    if (colliding) {
       velocity.x = 0;
       velocity.y = 0;
       velocity.z = 0;
@@ -45,7 +47,7 @@ class Grapple {
 
     hook.set(position.x, position.y, position.z);
 
-    if (abs(PVector.sub(initial, hook).x) > 1500 || abs(PVector.sub(initial, hook).y) > 1500 || abs(PVector.sub(initial, hook).z) > 1500) {
+    if (abs(PVector.sub(initial, hook).x) > 2000 || abs(PVector.sub(initial, hook).y) > 2000 || abs(PVector.sub(initial, hook).z) > 2000) {
       max = true;
       min = false;
     }
@@ -58,7 +60,7 @@ class Grapple {
   void draw() {
     pushMatrix();
     stroke(0, 255, 0);
-    translate(start.x, start.y, start.z);
+    translate(playerPos.x, playerPos.y, playerPos.z);
     //strokeWeight(10);
     //line(0, 0, 0, position.x, position.y, position.z);
     //strokeWeight(1);

@@ -9,7 +9,7 @@ class Bullet extends Radial {
     PVector difference = PVector.sub(target, position);
     rVelocity = difference.normalize();
     this.speed = speed;
-    setSize(20);
+    setSize(10);
   }
   
   void update() {
