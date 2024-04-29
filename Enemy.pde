@@ -46,7 +46,7 @@ class Enemy extends AABB {
   }
 
   void lockOn() {
-    PVector direction = PVector.sub(player.camera.position, position);
+    PVector direction = PVector.sub(new PVector(player.x, player.y, player.z), position);
     direction = direction.normalize();
     
     xz = (float) sqrt(direction.x * direction.x + direction.z * direction.z);
@@ -62,7 +62,7 @@ class Enemy extends AABB {
   void shoot() {
     shootCD -= dt;
     if(shootCD <= 0) {
-      Bullet b = new Bullet(position, 600, player.camera.position);
+      Bullet b = new Bullet(position, 600, new PVector(player.x, player.y, player.z));
       b.lifetime = 5;
       enemyBullets.add(b);
       shootCD = 3;

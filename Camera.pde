@@ -15,15 +15,15 @@ class Camera extends Radial {
     if (dy < 10) dy = 10;
 
 
-    //rotationAngle = map(-dx, 0, width, 0, TWO_PI);
-    //elevationAngle = map(dy, 0, height, 0, PI);
-    rotationAngle = map(mouseX, 0, width, 0, TWO_PI);
-    elevationAngle = map(mouseY, 0, height, 0, PI);
+    rotationAngle = map(-dx, 0, width, 0, TWO_PI);
+    elevationAngle = map(dy, 0, height, 0, PI);
+    //rotationAngle = map(mouseX, 0, width, 0, TWO_PI);
+    //elevationAngle = map(mouseY, 0, height, 0, PI);
     float distanceMultiplier = 1000;
     float cameraOffset = 75;
 
     centerX = cos(rotationAngle) * sin(elevationAngle); //forward back distance
-    centerY = -cos(elevationAngle); //up down rotation
+    centerY = cos(elevationAngle); //up down rotation
     centerZ = sin(rotationAngle) * sin(elevationAngle); //left right rotation
     position.set(x-(centerX*cameraOffset), y-100, z-(centerZ*cameraOffset));
     cameraEndpoint.set(centerX*distanceMultiplier + x, centerY*distanceMultiplier + y, centerZ*distanceMultiplier + z);

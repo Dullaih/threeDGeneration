@@ -2,7 +2,7 @@ class Bullet extends Radial {
   
   float speed;
   PVector velocity = new PVector();
-  float lifetime = 1;
+  float lifetime = .5;
   
   Bullet(PVector position, float speed, PVector target) {
     this.position.set(position);
@@ -27,6 +27,7 @@ class Bullet extends Radial {
   
   void draw() {
     pushMatrix();
+    noStroke();
     fill(200);
     translate(position.x, position.y, position.z);
     sphere(radius);

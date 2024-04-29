@@ -2,11 +2,16 @@ class Player extends AABB {
 
   boolean isGrounded;
   float modifier = 1;
-  float acceleration = 20;
-  float maxSpeed = 800;
+  float acceleration = 80;
+  float maxSpeed = 1000;
   Camera camera = new Camera();
   float grappleDist = 0;
   PVector difference = new PVector();
+  float px = 0, py = 0, pz = 0;
+  float health = 3;
+  float charges = 3, chargeTime = 5;
+  boolean hasCharges = true, hasDash = true;
+  float dashCharges = 2, dashTime = 4;
 
   Player(float xPos, float yPos, float zPos) {
     x = xPos;
@@ -17,11 +22,14 @@ class Player extends AABB {
   }
 
   void update() {
-    velocity.y += GRAVITY*2*dt;
+    if (!grapple.colliding) velocity.y += GRAVITY*2*dt;
 
     camera.update(x, y, z);
 
-    if (grapple.colliding) GrappleMovement();
+    if (grapple.colliding) {
+      GrappleMovement();
+      if(!grapple.pColliding) charges--;
+    }
     else {
       if (Keyboard.isDown(Keyboard.LEFT)) {
         velocity.x += sin(camera.rotationAngle)*acceleration*modifier;
@@ -40,34 +48,78 @@ class Player extends AABB {
         velocity.z += sin(camera.rotationAngle)*-acceleration*modifier;
       }
     }
+
     if (Keyboard.isDown(Keyboard.SPACE)) {
       grapple.min = true;
       grapple.colliding = false;
       if (isGrounded) velocity.y = -maxSpeed;
     }
-    if (Keyboard.onDown(Keyboard.SHIFT)) {
-      modifier = 40;
+
+    if (grapple.pColliding && !grapple.colliding) {
+      //println("stopopo");
+      velocity.x = (x-px)*acceleration;
+      velocity.y = (y-py)*acceleration/2;
+      velocity.z = (z-pz)*acceleration;
+    }
+
+    if (Keyboard.onDown(Keyboard.SHIFT) && hasDash) {
+      modifier = 20;
+      acceleration = 80;
       grapple.min = true;
       grapple.colliding = false;
+      dashCharges--;
     }
 
     if (velocity.x > maxSpeed*modifier) velocity.x = maxSpeed*modifier;
     if (velocity.x < -maxSpeed*modifier) velocity.x = -maxSpeed*modifier;
     if (velocity.z > maxSpeed*modifier) velocity.z = maxSpeed*modifier;
     if (velocity.z < -maxSpeed*modifier) velocity.z = -maxSpeed*modifier;
+    println(velocity.x + " | " + velocity.z);
 
     x += velocity.x * dt;
     y += velocity.y * dt;
     z += velocity.z * dt;
 
     if (Mouse.onDown(Mouse.LEFT)) {
-      Bullet b = new Bullet(camera.position, 2000, cameraEndpoint);
-      bullets.add(b);
+      shot.play();
+      Bullet b = new Bullet(camera.position, 4000, cameraEndpoint);
+      bullets.add(b);  
     }
-    if (Mouse.onDown(Mouse.RIGHT)) {
+    if (Mouse.onDown(Mouse.RIGHT) && hasCharges) {
       grapple = new Grapple(camera.position, 3000, cameraEndpoint);
+      snap.amp(0.2);
+      snap.play();
     }
 
+    if (charges == 0) {
+      hasCharges = false;
+    }
+    else hasCharges = true;
+    
+    if (charges < 3) {
+      chargeTime -= dt;
+      if(chargeTime <= 0) {
+        charges++;
+        chargeTime = 5;
+      }
+    }
+    
+    if (dashCharges == 0) {
+      hasDash = false;
+    }
+    else hasDash = true;
+    
+    if (dashCharges < 2) {
+      dashTime -= dt;
+      if(dashTime <= 0) {
+        dashCharges++;
+        dashTime = 4;
+      }
+    }
+
+    if (player.health == 0) {
+      exit();
+    }
 
     velocity.x *= 0.92;
     //velocity.y *= 0.95;
@@ -76,6 +128,12 @@ class Player extends AABB {
     isGrounded = false;
     if (modifier > 1) modifier *= 0.85;
     else modifier = 1;
+    if (acceleration > 80 && !grapple.colliding) acceleration *=.98;
+    else acceleration = 80;
+    px = x;
+    py = y;
+    pz = z;
+    grapple.pColliding = grapple.colliding;
     super.update();
   }
 
@@ -96,6 +154,7 @@ class Player extends AABB {
       x = lerp(x, grapple.hook.x, interpolate);
       y = lerp(y, grapple.hook.y, interpolate);
       z = lerp(z, grapple.hook.z, interpolate);
+      acceleration *= 1.5;
     }
   }
 

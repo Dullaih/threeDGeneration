@@ -4,7 +4,7 @@ class Grapple {
   PVector velocity = new PVector(), rVelocity = new PVector(), position = new PVector(), playerPos = new PVector(), initial = new PVector();
   boolean isDead;
   PVector tl = new PVector(), tr = new PVector(), bl = new PVector(), br = new PVector(), hook = new PVector(), difference = new PVector();
-  boolean max, min, colliding;
+  boolean max, min, colliding, pColliding;
 
   Grapple(PVector position, float speed, PVector target) {
     this.position.set(position);

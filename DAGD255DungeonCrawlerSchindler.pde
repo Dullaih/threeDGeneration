@@ -1,15 +1,26 @@
+//copyright Nathan Schindler 2024
+//FPS dungeoncrawler
+//WASD movement; LCLICK to shoot (semiauto); LSHIFT to dash (max 2 charges [4 second cooldown per charge]); RCLICK to grapple (max 3 charges [5 sec cooldown per charge])
+
+import processing.sound.*;
 import java.awt.Robot;
+
+SoundFile music;
+SoundFile shot;
+SoundFile kill;
+SoundFile snap;
 
 Robot robot;
 
 Grapple grapple;
 
+Level level;
+
 float dt = 0;
 float prevTime = 0;
-float floorWidth = 21, floorLength = 69, wallHeight = 6; //only use odd numbers for floor length/width
-int offsetX = 150, offsetY = -150, offsetZ = 150;
-int halfFloorW = (int) floorWidth/2, halfFloorL = (int) floorLength/2;
+
 PVector cameraEndpoint = new PVector();
+int offsetX = 150, offsetY = -150, offsetZ = 150;
 
 Player player;
 ArrayList<Enemy> enemies = new ArrayList();
@@ -22,59 +33,25 @@ final float GRAVITY = 981;
 
 
 void setup() {
-  size(1280, 720, P3D);
-  //fullScreen(P3D);
-  //noCursor();
-  player = new Player(offsetX*(halfFloorW-1), -3000, offsetZ*2);
+  //size(1280, 720, P3D);
+  level = new Level();
+  fullScreen(P3D);
+  noCursor();
+  player = new Player(offsetX*(level.halfFloorW-1), -3000, offsetZ*2);
   grapple = new Grapple(player.camera.position, 2000, cameraEndpoint);
   try {
     robot = new Robot();
   }
   catch (Exception e) {
   }
-
-  Tile floor = new Tile(offsetX*halfFloorW, 225, offsetZ*halfFloorL); //make floor
-  floor.setSize(offsetX*(floorWidth-2), 150, offsetZ*(floorLength-2));
-  tiles.add(floor);
   
-  for (int i = 0; i < 4; i++) { //make walls
-    if (i < 2) {
-      Tile t = new Tile(offsetX*halfFloorW, -300, offsetZ*(floorLength-1)*i);
-      t.setSize(offsetX*(floorWidth-2), -offsetY*wallHeight, 150);
-      tiles.add(t);
-    } else {
-      Tile t = new Tile(offsetX*(floorWidth-1)*(i-2), -300, offsetZ*halfFloorL);
-      t.setSize(150, -offsetY*wallHeight, offsetZ*(floorLength-2));
-      tiles.add(t);
-    }
-  }
+  music = new SoundFile(this, "Cyber Shift.wav");
+  shot = new SoundFile(this, "shot.wav");
+  kill = new SoundFile(this, "kill.wav");
+  snap = new SoundFile(this, "snap.wav");
   
-  for (int h = 0; h < wallHeight; h++) { //generate spawn areas
-    for (int i = 0; i < floorWidth-2; i++) {
-      Tile t = new Tile(offsetX*i+offsetX, offsetY*h-offsetY/2, offsetZ*8);
-      spawnTiles.add(t);
-      for (int j = 8; j < floorLength-2; j++) {
-        Tile z = new Tile(offsetX*i+offsetX, offsetY*h-offsetY/2, offsetZ*j+offsetZ);
-        spawnTiles.add(z);
-      }
-    }
-  }
-  
-  for(int i = 0; i < 10; i++) { //generate enemies
-    Tile currTile = spawnTiles.get((int)random(spawnTiles.size()-1));
-    Enemy e = new Enemy(currTile.x, currTile.y, currTile.z);
-    enemies.add(e);
-    for(int j = (int)currTile.y; j < 0; j -= offsetY) {
-      for(int k = 0; k < spawnTiles.size(); k++) {
-        Tile z = spawnTiles.get(k);
-        if(z.x == currTile.x && z.y == j - offsetY && z.z == currTile.z) {
-          tiles.add(z);
-          spawnTiles.remove(z);
-        }
-      }
-    }
-    spawnTiles.remove(currTile);
-  }
+  music.amp(0.3);
+  music.loop();
 }
 
 
@@ -92,7 +69,7 @@ void draw() {
 
   //UPDATE OBJECTS
 
-  //robot.mouseMove(width/2, height/2); //lock mouse to center of screen
+  robot.mouseMove(width/2, height/2); //lock mouse to center of screen
 
 
   for (int i = 0; i < tiles.size(); i++) { //visible tile collisions
@@ -108,7 +85,7 @@ void draw() {
       Bullet b = bullets.get(j);
       if (b.checkAABBCollision(t)) b.isDead = true;
     }
-    if(t.checkPointCollision(grapple.hook) && !grapple.min) { //with grapple
+    if (t.checkPointCollision(grapple.hook) && !grapple.min) { //with grapple
       grapple.colliding = true;
     }
   }
@@ -119,31 +96,57 @@ void draw() {
     Radial detect = e.detectionRadius;
     for (int j = 0; j < bullets.size(); j++) { //with bullets
       Bullet b = bullets.get(j);
-      if(b.checkAABBCollision(e)) {
-        e.isDead = true; b.isDead = true;
+      if (b.checkAABBCollision(e)) {
+        kill.amp(0.5);
+        kill.play();
+        e.isDead = true;
+        b.isDead = true;
       }
     }
     if (detect.checkAABBCollision(player)) { //with player entering their area
       e.lockedOn = true;
-    }
-    else e.lockedOn = false;
+    } else e.lockedOn = false;
     if (e.isDead) enemies.remove(e);
   }
-  
+
   for (int i = 0; i < bullets.size(); i++) { //bullet update
     Bullet b = bullets.get(i);
     b.update();
     if (b.isDead) bullets.remove(b);
   }
-  
+
   for (int i = 0; i < enemyBullets.size(); i++) { //bullet update
     Bullet b = enemyBullets.get(i);
     b.update();
+    if (b.checkAABBCollision(player)) {
+      //println("hit");
+      player.health--;
+      b.isDead = true;
+    }
     if (b.isDead) enemyBullets.remove(b);
   }
+
+  if (grapple != null && !grapple.min) grapple.update(new PVector(player.x, player.y, player.z));
+
+  if (player.y > 4000) {
+    for (int i = enemies.size(); i > 0; i--) {
+      enemies.remove(i-1);
+    }
+    for (int i = tiles.size(); i > 0; i--) {
+      tiles.remove(i-1);
+    }
+    for (int i = spawnTiles.size(); i > 0; i--) {
+      spawnTiles.remove(i-1);
+    }
+    level = new Level();
+    grapple = new Grapple(player.camera.position, 2000, cameraEndpoint);
+    player.x = offsetX*(level.halfFloorW-1);
+    player.y = -2000;
+    player.z = offsetZ*2;
+  }
   
-  if(grapple != null && !grapple.min) grapple.update(new PVector(player.x, player.y, player.z));
-  
+  level.update();
+
   player.update();
 
   //LATE UPDATE OBJECTS
@@ -162,12 +165,12 @@ void draw() {
     Bullet b = bullets.get(i);
     b.draw();
   }
-  
+
   for (int i = 0; i < enemies.size(); i++) {
     Enemy e = enemies.get(i);
     e.draw();
   }
-  
+
   for (int i = 0; i < enemyBullets.size(); i++) {
     Bullet b = enemyBullets.get(i);
     b.draw();
@@ -177,8 +180,8 @@ void draw() {
   //  Tile t = spawnTiles.get(i);
   //  t.draw();
   //}
-  
-  if(grapple != null && !grapple.max && !grapple.min) grapple.draw();
+
+  if (grapple != null && !grapple.max && !grapple.min) grapple.draw();
 
   player.draw();
 
