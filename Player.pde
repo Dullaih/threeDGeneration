@@ -9,7 +9,7 @@ class Player extends AABB {
   PVector difference = new PVector();
   float px = 0, py = 0, pz = 0;
   float health = 3;
-  float charges = 3, chargeTime = 5;
+  float charges = 30, chargeTime = 5;
   boolean hasCharges = true, hasDash = true;
   float dashCharges = 2, dashTime = 4;
 
@@ -28,7 +28,10 @@ class Player extends AABB {
 
     if (grapple.colliding) {
       GrappleMovement();
-      if(!grapple.pColliding) charges--;
+      if(!grapple.pColliding) {
+        velocity.y = 0;
+        charges--;
+      }
     }
     else {
       if (Keyboard.isDown(Keyboard.LEFT)) {
@@ -74,7 +77,7 @@ class Player extends AABB {
     if (velocity.x < -maxSpeed*modifier) velocity.x = -maxSpeed*modifier;
     if (velocity.z > maxSpeed*modifier) velocity.z = maxSpeed*modifier;
     if (velocity.z < -maxSpeed*modifier) velocity.z = -maxSpeed*modifier;
-    println(velocity.x + " | " + velocity.z);
+    println(velocity.y);
 
     x += velocity.x * dt;
     y += velocity.y * dt;

@@ -37,6 +37,7 @@ void setup() {
   level = new Level();
   fullScreen(P3D);
   noCursor();
+  hint(ENABLE_STROKE_PERSPECTIVE);
   player = new Player(offsetX*(level.halfFloorW-1), -3000, offsetZ*2);
   grapple = new Grapple(player.camera.position, 2000, cameraEndpoint);
   try {
@@ -64,7 +65,6 @@ void draw() {
 
 
   //SPAWN OBJECTS
-
 
 
   //UPDATE OBJECTS
@@ -189,6 +189,11 @@ void draw() {
 
   popMatrix();
   //DRAW HUD
+  hint(DISABLE_DEPTH_TEST);
+  fill(50, 50, 255);
+  stroke(1);
+  circle(width/2, height/2, 10);
+  hint(ENABLE_DEPTH_TEST);
 }
 
 void calcDeltaTime() {
