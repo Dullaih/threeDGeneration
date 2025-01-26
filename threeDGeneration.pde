@@ -2,13 +2,13 @@
 //FPS dungeoncrawler
 //WASD movement; LCLICK to shoot (semiauto); LSHIFT to dash (max 2 charges [4 second cooldown per charge]); RCLICK to grapple (max 3 charges [5 sec cooldown per charge])
 
-import processing.sound.*;
+//import processing.sound.*;
 import java.awt.Robot;
 
-SoundFile music;
-SoundFile shot;
-SoundFile kill;
-SoundFile snap;
+//SoundFile music;
+//SoundFile shot;
+//SoundFile kill;
+//SoundFile snap;
 
 Robot robot;
 
@@ -46,13 +46,13 @@ void setup() {
   catch (Exception e) {
   }
   
-  music = new SoundFile(this, "Cyber Shift.wav");
-  shot = new SoundFile(this, "shot.wav");
-  kill = new SoundFile(this, "kill.wav");
-  snap = new SoundFile(this, "snap.wav");
+  //music = new SoundFile(this, "Cyber Shift.wav");
+  //shot = new SoundFile(this, "shot.wav");
+  //kill = new SoundFile(this, "kill.wav");
+  //snap = new SoundFile(this, "snap.wav");
   
-  music.amp(0.3);
-  music.loop();
+  //music.amp(0.3);
+  //music.loop();
 }
 
 
@@ -97,8 +97,8 @@ void draw() {
     for (int j = 0; j < bullets.size(); j++) { //with bullets
       Bullet b = bullets.get(j);
       if (b.checkAABBCollision(e)) {
-        kill.amp(0.5);
-        kill.play();
+        //kill.amp(0.5);
+        //kill.play();
         e.isDead = true;
         b.isDead = true;
       }

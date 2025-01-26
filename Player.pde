@@ -84,14 +84,14 @@ class Player extends AABB {
     z += velocity.z * dt;
 
     if (Mouse.onDown(Mouse.LEFT)) {
-      shot.play();
+      //shot.play();
       Bullet b = new Bullet(camera.position, 4000, cameraEndpoint);
       bullets.add(b);  
     }
     if (Mouse.onDown(Mouse.RIGHT) && hasCharges) {
       grapple = new Grapple(camera.position, 3000, cameraEndpoint);
-      snap.amp(0.2);
-      snap.play();
+      //snap.amp(0.2);
+      //snap.play();
     }
 
     if (charges == 0) {
